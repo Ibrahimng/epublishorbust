@@ -1,0 +1,17 @@
+/*
+//** Background color for `<body>`.
+@body-bg:               #fff;
+//** Global text color on `<body>`.
+@text-color:            @gray-dark;
+*/
+/*
+//** Border color for table and cell borders.
+@table-border-color:            @gray-dark;
+*/
+/*
+// Inverted navbar
+// Reset inverted navbar basics
+@navbar-inverse-color:                      @text-color;
+@navbar-inverse-bg:                         @body-bg;
+@navbar-inverse-border:                     transparent;
+*/

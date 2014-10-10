@@ -1,0 +1,6 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^preview\.epublishorbust\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.preview\.epublishorbust\.com$
+RewriteRule ^/?$ "http\:\/\/www\.epublishorbust\.com\/" [R=301,L]
+
