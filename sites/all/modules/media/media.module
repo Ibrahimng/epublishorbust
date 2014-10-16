@@ -13,16 +13,16 @@
 /* ***************************************** */
 
 // A registry of variable_get defaults.
-require_once (dirname(__FILE__) . '/includes/media.variables.inc');
+require_once(dirname(__FILE__) . '/includes/media.variables.inc');
 
 // Define media related file types and how to display them.
-require_once (dirname(__FILE__) . '/includes/media.types.inc');
+require_once(dirname(__FILE__) . '/includes/media.types.inc');
 
 // Code relating to using media as a field.
-require_once (dirname(__FILE__) . '/includes/media.fields.inc');
+require_once(dirname(__FILE__) . '/includes/media.fields.inc');
 
  // Functions for working with [[inline tags]] and wysiwyg editors.
-require_once (dirname(__FILE__) . '/includes/media.filter.inc');
+require_once(dirname(__FILE__) . '/includes/media.filter.inc');
 
 /* ***************************************** */
 /* Hook Implementations                      */
