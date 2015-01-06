@@ -59,8 +59,8 @@ function workbench_scheduler_admin_page() {
       $row = array(
         $schedule->label,
         $name,
-        $states[$schedule->start_state],
-        $states[$schedule->end_state],
+        (!empty($states[$schedule->start_state]) ? $states[$schedule->start_state] : ''),
+        (!empty($states[$schedule->end_state]) ? $states[$schedule->end_state] : ''),
         $types,
         //link to edit the schedule
         l(t('Edit'), 'admin/config/workbench/scheduler/schedules/' . $name . '/edit'),
@@ -138,13 +138,16 @@ function workbench_scheduler_admin_edit_schedule($form, &$form_state, $name=FALS
   //save to the form
   $form['#states'] = $states;
 
+  // add none option
+  $states = array_merge(array('' => t('None')), $states);
+
   //select list for start state
   $form['start_state'] = array(
     '#type'           => 'select',
     '#title'          => t('Start State'),
     '#description'    => t('Select the state to be set when a node reaches its \'start date\''),
     '#options'        => $states,
-    '#required'       => TRUE,
+    '#required'       => FALSE,
   );
 
   //select list for end state
@@ -153,30 +156,53 @@ function workbench_scheduler_admin_edit_schedule($form, &$form_state, $name=FALS
     '#title'        => t('End State'),
     '#description'  => t('Select the state to be set when a node reaches its \'end date\''),
     '#options'      => $states,
-    '#required'     => TRUE,
+    '#required'     => FALSE,
   );
 
   // fetch a list of content types that have moderation enabled.
   // from the workbench moderation module
   module_load_include('module', 'workbench_moderation');
   $types = workbench_moderation_moderate_node_types();
-  $tmp_types = array();
+  $info = entity_get_info('node');
+
   //make into an associative array
   foreach ($types as $type) {
-    $tmp_types[$type] = $type;
+    $states = workbench_moderation_states();
+    $default_state = variable_get('workbench_moderation_default_state_' . $type, workbench_moderation_state_none());
+    $label = $info['bundles'][$type]['label'];
+    $tmp_types[$type] = array(
+      'label' => $label,
+      'default_state' => $states[$default_state]->label,
+    );
   }
-  $types = $tmp_types;
-  unset($tmp_types);
   //store types to the form
   $form['#types'] = $types;
+  $types = $tmp_types;
+  unset($tmp_types);
 
+  $header = array(
+    'label' => t('Content Type'),
+    'default_state' => t('Default Moderation State'),
+  );
+
+  // Label  and description
+  $form['table_label'] = array(
+    '#type' => 'markup',
+    '#markup' => '<label>'.t('Content Types').'</label>',
+  );
+  $form['table_description'] = array(
+    '#type' => 'markup',
+    '#markup' => t('Select the content types that can use this schedule'),
+  );
   //checkboxes for content types
   $form['types'] = array(
-    '#type'           => 'checkboxes',
+    '#type'           => 'tableselect',
     '#title'          => t('Content Types'),
     '#description'    => t('Select the content types that can use this schedule'),
+    '#header'         => $header,
     '#options'        => $types,
     '#required'       => TRUE,
+    '#empty' => t('No Content Types are configured with workbench moderation'),
   );
 
   $form['submit'] = array(
@@ -191,13 +217,14 @@ function workbench_scheduler_admin_edit_schedule($form, &$form_state, $name=FALS
       '#type'   => 'submit',
       '#value'  => t('Delete'),
     );
+
     //remove the machine name field
     unset($form['name']);
     //set default values for the other fields
     $form['label']['#default_value']        = $schedule->label;
     $form['start_state']['#default_value']  = $schedule->start_state;
     $form['end_state']['#default_value']    = $schedule->end_state;
-    $form['types']['#default_value']        = $schedule->types;
+    $form['types']['#default_value']        = drupal_map_assoc($schedule->types);
   }
   //return the form
   return $form;
@@ -324,6 +351,19 @@ function workbench_scheduler_admin_delete_schedule_submit($form, &$form_state) {
  */
 function workbench_scheduler_admin_manage_node_schedules($form, &$form_state, $node) {
   $revisions = node_revision_list($node);
+
+  $schedules = array(
+    'schedule_active' => array(),
+    'schedule_inactive' => array(),
+  );
+
+  // Check to see if this node type supports more than on
+  $type_settings = variable_get('workbench_scheduler_'.$node->type);
+  $limit_current_revision = FALSE;
+  if(in_array('workbench_scheduler_limit_current_revision', $type_settings)){
+    $limit_current_revision = TRUE;
+  }
+
   foreach ($revisions as $vid => $revision) {
     // Load up all the schedules for all revisions of this node
     $node_schedules[$vid] = workbench_scheduler_load_node_schedule($node->nid, $vid);
@@ -341,8 +381,9 @@ function workbench_scheduler_admin_manage_node_schedules($form, &$form_state, $n
       if ($node_schedule->end_date) {
         $end_date = format_date($node_schedule->end_date, 'custom', 'Y-m-d H:i:s');
       }
+
       // Build each row of the tableselect
-      $manage_schedules[$vid] = array (
+      $manage_schedules = array (
         'title'        => array('data' => array('#title' => $vid)),
         'vid'          => l($vid, 'node/' . $node->nid . '/revisions/' . $vid . '/view'),
         'label'        => $node_schedule->label,
@@ -350,26 +391,76 @@ function workbench_scheduler_admin_manage_node_schedules($form, &$form_state, $n
         'start_date'   => $start_date,
         'end_state'    => $node_schedule->end_state,
         'end_date'     => $end_date,
+        'completed'    => ($node_schedule->completed) ? t('Yes') : t('No'),
         'vid_edit'     => l('Edit', 'node/' . $node->nid . '/manage_schedules/' . $vid . '/edit'),
       );
+
+      // Limit Current revision - only run schedule on highest vid
+      if($limit_current_revision){
+
+        // Active schedule?
+        if ($node->workbench_moderation['current']->vid == $vid) {
+          $schedules['schedule_active'][$vid] = $manage_schedules;
+        } else {
+          $schedules['schedule_inactive'][$vid] = $manage_schedules;
+
+        }
+      // Run on all schedules that haven't completed yet (default behavior)
+      }else{
+
+        // Active schedule?
+        if (!$node_schedule->completed) {
+          $schedules['schedule_active'][$vid] = $manage_schedules;
+        } else {
+          $schedules['schedule_inactive'][$vid] = $manage_schedules;
+
+        }
+
+      }
     }
-    // Build the the tableselect form, with a hidden field for the nid
-    $form['nid'] = array('#type' => 'hidden', '#value' => $node->nid);
-    $form['manage_node_schedules'] = array(
-      '#type'      => 'tableselect',
-      '#title'     => t('Schedules applied to this node'),
-      '#options'   => $manage_schedules,
-      '#multiple'  => TRUE,
-      '#header'    => array(
-        'vid'          => t('Revision ID'),
-        'label'        => t('Schedule Name'),
-        'start_state'  => t('Start State'),
-        'start_date'   => t('Start Date'),
-        'end_state'    => t('End State'),
-        'end_date'     => t('End Date'),
-        'vid_edit'     => t('Edit'),
-      ),
-    );
+
+    // Render Schedules
+    foreach ($schedules as $status => $schedule) {
+      if(!empty($schedule)){
+          // Build the the tableselect form, with a hidden field for the nid
+          $form['nid'] = array('#type' => 'hidden', '#value' => $node->nid);
+
+
+          // Fieldsets
+          if ($status == 'schedule_active') {
+            $fieldset = array(
+              '#type'=>'fieldset',
+              '#title' => t('Active Schedule'),
+              '#description' => t('Only active schedules are run.'),
+            );
+
+          } else {
+            $fieldset = array(
+              '#type'=>'fieldset',
+              '#title' => t('Inactive Schedules'),
+            );
+          }
+
+          // Output the form
+          $form[$status.'_fieldset'] = $fieldset;
+          $form[$status.'_fieldset'][$status] = array(
+            '#type'      => 'tableselect',
+            '#title'     => t('Schedules applied to this node'),
+            '#options'   => $schedule,
+            '#multiple'  => TRUE,
+            '#header'    => array(
+              'vid'          => t('Revision ID'),
+              'label'        => t('Schedule Name'),
+              'start_state'  => t('Start State'),
+              'start_date'   => t('Start Date'),
+              'end_state'    => t('End State'),
+              'end_date'     => t('End Date'),
+              'completed'     => t('Completed'),
+              'vid_edit'     => t('Edit'),
+            ),
+          );
+      }
+    }
     // The form submit actions
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
@@ -392,9 +483,12 @@ function workbench_scheduler_admin_manage_node_schedules($form, &$form_state, $n
  */
 function workbench_scheduler_admin_manage_node_schedules_submit($form, &$form_state) {
   $nid = $form_state['values']['nid'];
-  foreach ($form_state['values']['manage_node_schedules'] as $vid => $checked) {
-    if ($vid == $checked) {
-      workbench_scheduler_delete_node_schedule($nid, $vid);
+  $fieldsets = array('schedule_active', 'schedule_inactive');
+  foreach($fieldsets as $key){
+    foreach ($form_state['values'][$key] as $vid => $checked) {
+      if ($vid == $checked) {
+        workbench_scheduler_delete_node_schedule($nid, $vid);
+      }
     }
   }
 }
@@ -427,8 +521,8 @@ function workbench_scheduler_admin_edit_revision_schedule($form, &$form_state, $
     if (user_access('set any workbench schedule') || user_access('set workbench schedule for ' . $schedule->name)) {
       $schedule_options[$schedule->sid] = array(
         'label' => $schedule->label,
-        'start_state' => $moderation_states[$schedule->start_state],
-        'end_state' => $moderation_states[$schedule->end_state],
+        'start_state' => isset($moderation_states[$schedule->start_state]) ? $moderation_states[$schedule->start_state] : '',
+        'end_state' => isset($moderation_states[$schedule->end_state]) ? $moderation_states[$schedule->end_state] : '',
       );
     }
   }
@@ -458,6 +552,25 @@ function workbench_scheduler_admin_edit_revision_schedule($form, &$form_state, $
     '#title'        => t('End date'),
     '#description'  => t('Select the date to switch this node to the scheduled \'end state\''),
   );
+
+  // Node only allow most recent revision schedule?
+  $type_settings = variable_get('workbench_scheduler_'.$node->type, FALSE);
+  // Check if only process latest revision
+  if(in_array('workbench_scheduler_limit_current_revision', $type_settings)){
+     // getting the latest revision
+    $rev_list = node_revision_list($node);
+    $latest_vid = max(array_keys($rev_list));
+
+    // Is this vid not the most recent?
+    if ($latest_vid != $vid) {
+      $form['note'] = array(
+        '#type' => 'item',
+        '#title' => t('Note'),
+        '#markup' => t('THIS SCHEDULE WILL NOT BE RUN. This node type is set to run the schedule for only the most '. l('recent revision', 'node/'.$node->nid.'/manage_schedules/'.$latest_vid.'/edit')),
+      );
+    }
+  }
+
   // Add existing node schedule as defaults
   $node_schedule = workbench_scheduler_load_node_schedule($node->nid, $vid);
   if ($node_schedule) {
