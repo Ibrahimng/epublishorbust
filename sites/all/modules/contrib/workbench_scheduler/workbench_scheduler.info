@@ -7,17 +7,9 @@ dependencies[] = workbench_moderation
 dependencies[] = date
 dependencies[] = date_popup
 
-files[] = workbench_scheduler.module
-files[] = workbench_scheduler.admin.inc
-files[] = workbench_scheduler.views.inc
-files[] = workbench_scheduler.features.inc
-files[] = includes/workbench_scheduler_handler_filter_state.inc
-files[] = includes/workbench_scheduler_handler_filter_name.inc
-files[] = tests/workbench_scheduler.test
-
-; Information added by Drupal.org packaging script on 2014-12-16
-version = "7.x-1.5"
+; Information added by Drupal.org packaging script on 2015-11-20
+version = "7.x-1.8"
 core = "7.x"
 project = "workbench_scheduler"
-datestamp = "1418754782"
+datestamp = "1448038142"
 

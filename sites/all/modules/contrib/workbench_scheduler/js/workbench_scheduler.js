@@ -1,10 +1,13 @@
 /**
-* @file
-* Sets the summary for Workbench Scheduler on vertical tabs.
-*/
+ * @file
+ *
+ * The javascript functionality for workbench Scheduler.
+ * Sets the summary for Workbench Scheduler on vertical tabs.
+ */
+
 (function ($) {
 
-    // Hiding start and end date fields
+    // Hiding start and end date fields.
     Drupal.behaviors.workbenchSchedulerOptions = {
         attach: function (context) {
 
@@ -13,9 +16,15 @@
             var start_time = $('input[name="workbench_scheduler_start_date[time]"]');
             var end_date = $('input[name="workbench_scheduler_end_date[date]"]');
             var end_time = $('input[name="workbench_scheduler_end_date[time]"]');
+            var schedules = Drupal.settings.workbench_scheduler.schedules;
+            var type = false;
 
-            // Hiding start date field
-            if (Drupal.settings.workbench_scheduler.schedules[type_input.val()].start_state == '') {
+            if (type_input.val() in schedules) {
+                type = schedules[type_input.val()];
+            }
+
+            // Hiding start date field, if exists.
+            if (type && (type.start_state == '')) {
                 start_date.val('');
                 start_time.val('');
                 $(".form-item-workbench-scheduler-start-date").hide();
@@ -24,8 +33,8 @@
                 $(".form-item-workbench-scheduler-start-date").show();
             }
 
-            // Hiding end date field
-            if (Drupal.settings.workbench_scheduler.schedules[type_input.val()].end_state == '') {
+            // Hiding end date field.
+            if (type && (type.end_state == '')) {
                 end_date.val('');
                 end_time.val('');
                 $(".form-item-workbench-scheduler-end-date").hide();
@@ -41,42 +50,43 @@
         }
     };
 
-    // Vertical tabs
+    // Vertical tabs.
     Drupal.behaviors.workbenchSchedulerSettingsSummary = {
         attach: function (context) {
 
             $('#edit-workbench-scheduler', context).drupalSetSummary(function (context) {
-                var vals = new Array();
+                var vals = [];
 
-                // Schedule type
+                // Schedule type.
                 var type_input = $('input[name="workbench_scheduler_sid"]:checked');
                 var type = Drupal.settings.workbench_scheduler.schedules[type_input.val()];
 
                 vals.push(type.label);
 
-                // If schedule exists
-                if(type_input.val() > 0){
+                // If schedule exists.
+                if (type_input.val() > 0) {
 
-                    // Start Date and Time
+                    // Start Date and Time.
                     var start_date = $('input[name="workbench_scheduler_start_date[date]"]');
                     var start_time = $('input[name="workbench_scheduler_start_date[time]"]');
+                    var start_text = $('label[for="edit-workbench-scheduler-start-date"]');
                     if (start_date.val() || start_time.val()) {
-                        vals.push(Drupal.checkPlain('Start Date: ' + start_date.val() + ' ' + start_time.val()));
+                        vals.push(Drupal.t('@start_text: @start_date @start_time', {'@start_text': start_text.text(), '@start_date':start_date.val(), '@start_time':start_time.val()}));
                     }
 
-                    // End Date and Time
+                    // End Date and Time.
                     var end_date = $('input[name="workbench_scheduler_end_date[date]"]');
                     var end_time = $('input[name="workbench_scheduler_end_date[time]"]');
+                    var end_text = $('label[for="edit-workbench-scheduler-end-date"]');
                     if (end_date.val() || end_time.val()) {
-                        vals.push(Drupal.checkPlain('End Date: ' + end_date.val() + ' ' + end_time.val()));
+                        vals.push(Drupal.t('@end_text: @end_date @end_time', {'@end_text': end_text.text(), '@end_date':end_date.val(), '@end_time':end_time.val()}));
                     }
                 }
 
-               return vals.join("<br />");
+                return vals.join("<br />");
 
             });
         }
     };
 
 })(jQuery);
-

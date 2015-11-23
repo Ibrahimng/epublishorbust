@@ -10,11 +10,11 @@
 function workbench_scheduler_features_api() {
   return array(
     'workbench_scheduler' => array(
-      'name'            => t('Workbench Schedules'),
-      'default_hook'    => 'workbench_scheduler_export_schedules',
-      'feature_source'  => TRUE,
-      'default_file'    => FEATURES_DEFAULTS_INCLUDED,
-      'file'            => drupal_get_path('module', 'workbench_scheduler') . '/workbench_scheduler.features.inc',
+      'name' => t('Workbench Schedules'),
+      'default_hook' => 'workbench_scheduler_export_schedules',
+      'feature_source' => TRUE,
+      'default_file' => FEATURES_DEFAULTS_INCLUDED,
+      'file' => drupal_get_path('module', 'workbench_scheduler') . '/workbench_scheduler.features.inc',
     ),
   );
 }
@@ -57,7 +57,7 @@ function workbench_scheduler_features_export_render($module_name, $data) {
   foreach ($data as $schedule) {
     $items[$schedule] = workbench_scheduler_load_schedules($schedule);
 
-    // Unset SID to prevent overridden state
+    // Unset SID to prevent overridden state.
     unset($items[$schedule]->sid);
   }
 
