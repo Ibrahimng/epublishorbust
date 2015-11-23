@@ -7,3 +7,5 @@ sites/*/private
 
 # Ignore Mac .DS_Store
 .DS_Store
+modules/.DS_Store
+sites/.DS_Store
