@@ -1,0 +1,43 @@
+.snippet {
+  overflow: auto;
+  display: inline-block;
+  margin: 0 10px;
+  vertical-align: top;
+
+  
+  .snippet-content {
+    width: 370px;
+    margin-left: 20px;
+    float: left;
+    > p {
+      font-size: px2rem(14);
+    }
+  }
+  
+  &-title {
+    font-size: px2rem(24);
+    margin-bottom: .7em;
+    margin-top: 0;
+  }
+  
+  &-attribution {
+    font-style: italic;
+    & > a {
+      color: $dark-gray;
+      &:hover, &:visited, &:link, &:active {
+        color: $dark-gray;
+      }
+    }
+  }
+  
+  &-author_thumb {
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+    border:3px solid $white;
+    box-shadow: 0 0 3px rgba(0,0,0, .4);
+    float: left;
+    margin-top: 37px;
+  }
+  
+}

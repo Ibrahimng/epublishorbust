@@ -1,66 +1,105 @@
-name = ePublish or BUST
-description = An ePublish or BUST theme based on Bootstrap.
-core = 7.x
-base theme = bootstrap
+
+;----------// Theme Information
+  name        = ePublish or BUST!
+  description = A sub theme based on Bartik.
+  core        = 7.x
+  release     = 7.x-3.x
+  screenshot  = screenshot.png
+  base theme  = bartik
 
 
-;;;;;;;;;;;;;;;;;;;;;
-;; Regions
-;;;;;;;;;;;;;;;;;;;;;
+;----------// Stylesheets
 
-regions[navigation]     = 'Navigation'
-regions[header]         = 'Top Bar'
-regions[highlighted]    = 'Highlighted'
-;regions[help]           = 'Help'
-regions[content]        = 'Content'
-regions[sidebar_first]  = 'Primary'
-;regions[sidebar_second] = 'Secondary'
-regions[footer]         = 'Footer'
-regions[page_top]       = 'Page top'
-regions[page_bottom]    = 'Page bottom'
+  ; See each stylesheet for extensive documentation and help.
+  ;stylesheets[screen][] = css/global.base.css
+  ;stylesheets[screen][] = css/global.styles.css
 
 
-;;;;;;;;;;;;;;;;;;;;;
-;; Stylesheets
-;;;;;;;;;;;;;;;;;;;;;
-
-stylesheets[all][] = css/style.css
+  ; Print - uncomment to load basic print styles.
+  ; stylesheets[print][] = css/print.css
 
 
-; For information on choosing the desired method, please read the Drupal
-; Bootstrap sub-theme "how-to" documentation:
-; https://drupal.org/node/1978010
+  ; Internet Explorer Stylesheets
+  ;
+  ; AT can load stylesheets in conditional comments from the info file.
+  ;
+  ; Syntax: ie_stylesheets[media][condition][] = path/to/file (path must be relative to your theme root)
+  ;
+  ; For example if you want to load a stylesheet just for IE7 use the following (note: you need to create "ie7.css" in the /css/ directory):
+  ; ie_stylesheets[screen][IE 7][] = css/ie7.css
+  ;
+  ; By default the sub-theme has one IE stylesheet which loads for "less than IE9" but "not IEMobile 7".
+  ; Uncomment the following to use the included IE styleseet:
 
-; ;----------------------------------
-; ; METHOD 1: Bootstrap Source Files
-; ;----------------------------------
-; 
-; ;;;;;;;;;;;;;;;;;;;;;
-; ;; Scripts
-; ;;;;;;;;;;;;;;;;;;;;;
-; 
-; scripts[] = 'bootstrap/js/affix.js'
-; scripts[] = 'bootstrap/js/alert.js'
-; scripts[] = 'bootstrap/js/button.js'
-; scripts[] = 'bootstrap/js/carousel.js'
-; scripts[] = 'bootstrap/js/collapse.js'
-; scripts[] = 'bootstrap/js/dropdown.js'
-; scripts[] = 'bootstrap/js/modal.js'
-; scripts[] = 'bootstrap/js/tooltip.js'
-; scripts[] = 'bootstrap/js/popover.js'
-; scripts[] = 'bootstrap/js/scrollspy.js'
-; scripts[] = 'bootstrap/js/tab.js'
-; scripts[] = 'bootstrap/js/transition.js'
-
-scripts[] = 'hotjar.js'
-; ; Disable BootstrapCDN if using Bootstrap source files in your sub-theme.
-; settings[bootstrap_cdn] = ''
+  ; ie_stylesheets[screen][(lt IE 9)&(!IEMobile 7)][] = css/lt-ie9.css
 
 
-; ;-------------------------
-; ; METHOD 2: Bootstrap CDN
-; ;-------------------------
-;
-; Method 2 uses BootstrapCDN, the only thing you might need to provide here
-; is overrides to Bootstrap theme settings. Copy them here from the base theme
-; to override.
+  ; Unset Module CSS or other Stylesheets
+  ;
+  ; In your theme settings you can unset many stylesheets using the Unset CSS Extension. If for some
+  ; reason the file you want to unset is not showing, you can explicitly declare it here. Once you have
+  ; finished adding your declarations you must clear the sites cache, then go to your theme settings and
+  ; check the checkbox for the file, then save the theme settings and the file will be unset thereafter.
+  ;
+  ; Follow the syntax:
+  ;
+  ; unset_css[path/to/css/file.css] = 1
+  ;
+  ; For example to unset foobar_module.css you might use something like this:
+  ; unset_css[sites/all/modules/foobar_module/foobar_module.css] = 1
+
+  stylesheets[all][] = bower_components/normalize.css/normalize.css
+  stylesheets[all][] = bower_components/selectize/dist/css/selectize.css
+  stylesheets[all][] = bower_components/flexslider/flexslider.css
+  stylesheets[all][] = css/styles.css
+
+
+;----------// Scripts
+
+  ; Internet Explorer Scripts
+  ;
+  ; AT can load scripts in conditional comments from the info file. If you are planning to use a polyfill be sure to check
+  ; the "Settings" tab in theme settings - this includes checkboxes to enable the HTML5 Shiv (on by default), Respond.js and
+  ; boxsizing.htc. See the js folder in at_core to view these scripts.
+  ;
+  ; Syntax: ie_scripts[condition] = path/to/file (path must be relative to your theme root)
+  ;
+  ; For example if you want to load a script just for IE 8 and below use the following as a guide:
+  ; ie_scripts[lte IE 8] = js/my-script.js
+
+  scripts[] = bower_components/jquery/dist/jquery.js
+  scripts[] = bower_components/microplugin/src/microplugin.js
+  scripts[] = bower_components/sifter/sifter.js
+  scripts[] = bower_components/selectize/dist/js/selectize.js
+  scripts[] = bower_components/flexslider/jquery.flexslider.js
+  scripts[] = bower_components/placeholders/dist/placeholders.js
+  scripts[] = bower_components/picturefill/dist/picturefill.js
+
+  regions[header] = Header
+
+  regions[help] = Help
+  regions[page_top] = Page top
+  regions[page_bottom] = Page bottom
+  regions[highlighted] = Highlighted
+
+  regions[featured] = Featured
+  regions[content] = Content
+  regions[sidebar_first] = Sidebar first
+  regions[sidebar_second] = Sidebar second
+
+  regions[triptych_first] = Triptych first
+  regions[triptych_middle] = Triptych middle
+  regions[triptych_last] = Triptych last
+
+  regions[footer_firstcolumn] = Footer first column
+  regions[footer_secondcolumn] = Footer second column
+  regions[footer_thirdcolumn] = Footer third column
+  regions[footer_fourthcolumn] = Footer fourth column
+  regions[footer] = Footer
+
+  settings[shortcut_module_link] = 0
+
+
+  ; Information added by Drupal.org packaging script on 2016-02-24
+  version = "7.43"
+  project = "drupal"

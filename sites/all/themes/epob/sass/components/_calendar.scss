@@ -1,0 +1,72 @@
+.view .date-nav-wrapper {
+  //$width: 100px;
+  //$padding: 22;
+  //$box_width: 275;
+
+  //display: inline-block;
+  padding: px2rem(30) 0 px2rem(30) 0;
+  border-radius: 4em;
+  //color: $white;
+
+  //width: px2rem($width);
+  text-align: center;
+  //position: absolute;
+  //margin-top: px2rem(($width/2 + $padding)*-1);
+  //margin-left: px2rem($box_width/2 - $padding - $width/2);
+  color: $medium-darker-gray;
+  position: relative;
+  //display: inline-block;
+  //left: -200px;
+  .pager {
+   // display: inline-block;
+  }
+  .date-nav .pager {
+    width: px2rem(240);
+    margin: auto;
+    //display: inline-block;
+    li {
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+    }
+  }
+  .date-prev {
+    right: auto;
+    left: auto;
+    //width:auto;
+    position: relative;
+    float: left;
+    a {
+      font-family: fedfont;
+      font-size: px2rem(40);
+      &:before {
+        content: "i";
+      }
+    }
+  }
+  .date-next {
+    //right: auto;
+    //left: auto;
+    //width:auto;
+    //top: 0;
+    position: relative;
+    float: right;
+    a {
+      font-family: fedfont;
+      font-size: px2rem(40);
+      &:before {
+        content: "j";
+      }
+    }
+  }
+
+
+
+}
+
+.view .date-nav-wrapper .date-heading h3 {
+  //left: auto;
+  //right:auto;
+  //width:auto;
+  //position: relative;
+}

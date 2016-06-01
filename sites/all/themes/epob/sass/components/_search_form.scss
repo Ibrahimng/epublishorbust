@@ -1,0 +1,38 @@
+$search_form-height: px2rem(30);
+$search_form-font_size: px2rem(16);
+
+.search_form {
+  font-size: 0;
+
+
+  &-phrase {
+    vertical-align: top;
+    height: $search_form-height;
+    box-sizing: border-box;
+    font-size: $search_form-font_size;
+    border: 1px solid $medium-gray;
+    border-left: none;
+    width: px2rem(205);
+    padding-left: px2rem(10);
+    padding-right: px2rem(10);
+    border-radius: 5px 0 0 5px;
+  }
+
+  &-submit {
+    vertical-align: top;
+    height: $search_form-height;
+    font-size: $search_form-font_size;
+    border: 1px solid $medium-gray;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+    background-color: $light-gray;
+    &:before {
+      color: $medium-darker-gray;
+      font-family: fedfont;
+      content: "a";
+      font-size: px2rem(20);
+      margin-top: px2rem(2);
+      display: inline-block;
+    }
+  }
+}

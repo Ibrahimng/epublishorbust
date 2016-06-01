@@ -1,0 +1,124 @@
+.slideshow {
+  $height: px2rem(630);
+  $prev_next_icon_height: 311;
+  $full_width_breakpoint: 820px;
+
+  width: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  position: relative;
+  height: $height;
+  background-image: url('../images/slideshow-bg-1000.jpg');
+  background-size: cover;
+  background-position: bottom;
+  margin-bottom: 0;
+
+  @include breakpoint(801px) {
+    background-image: url('../images/slideshow-bg-2000.jpg');
+  }
+  @include breakpoint(1501px) {
+    background-image: url('../images/slideshow-bg-3000.jpg');
+  }
+  @include breakpoint(2501px) {
+    background-image: url('../images/slideshow-bg.jpg');
+  }
+
+  &-slide {
+    padding: 3px;
+    > p {
+      color: $white;
+      font-size: px2rem(18);
+    }
+  }
+
+  &-slide_title {
+    font-size: px2rem(44);
+    color: $white;
+    margin-bottom: 1em;
+    margin-top: px2rem(-10);
+    &-image {
+      margin-bottom: -1em;
+      display: inline-block;
+    }
+  }
+
+  > .slides {
+    width: auto;
+    padding: 0 20px;
+    height: $height;
+    @include breakpoint($full_width_breakpoint) {
+      padding-left: 200px;
+      width: px2rem(500);
+    }
+    > li {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+
+    }
+  }
+  > .slides--fullscreen {
+    width: auto;
+    padding: 0;
+    height: $height;
+    @include breakpoint($full_width_breakpoint) {
+        padding: 0 20px;
+        width: px2rem(960);
+      margin-left: auto;
+      margin-right: auto;
+      }
+    > li {
+      position: relative;
+      top: 25%;
+
+      }
+    .slides--fullscreen p {
+        width: 480px;
+      }
+    }
+
+  .flex-direction-nav a {
+    display: none;
+    @include breakpoint($full_width_breakpoint) {
+      display: block;
+      height: px2rem($prev_next_icon_height + 30);
+      width: px2rem(200);
+      top: 30%;
+    }
+  }
+
+  .flex-direction-nav a:before {
+    font-family: fedfont;
+    font-size: px2rem($prev_next_icon_height);
+    color: white;
+    text-shadow: px2rem(2) px2rem(1) px2rem(3) rgba(0, 0, 0, 0.4);
+  }
+
+  .flex-direction-nav a.flex-next:before {
+    content: "c";
+  }
+
+  .flex-direction-nav a.flex-prev:before {
+    content: "d";
+    margin-left: px2rem(-125);
+  }
+
+  .flex-control-nav {
+    bottom: px2rem(15);
+  }
+
+  .flex-control-nav li {
+    margin: 0 px2rem(4);
+  }
+
+  .flex-control-paging li a {
+    background-color: $white;
+  }
+
+  .flex-control-paging li a.flex-active {
+    background-color: rgba(255,255,255, .5);
+  }
+
+}

@@ -1,0 +1,38 @@
+// Default HTML elements
+
+@font-face {
+  $path: '../bower_components/fontawesome/fonts/';
+  font-family: 'FontAwesome';
+  src: url($path + 'fontawesome-webfont.eot?v=4.3.0');
+  src: url($path + 'fontawesome-webfont.eot?#iefix&v=4.3.0') format('embedded-opentype'), url($path + 'fontawesome-webfont.woff2?v=4.3.0') format('woff2'), url($path + 'fontawesome-webfont.woff?v=4.3.0') format('woff'), url($path + 'fontawesome-webfont.ttf?v=4.3.0') format('truetype'), url($path + 'fontawesome-webfont.svg?v=4.3.0#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  $path: '../fonts/fedfont/';
+  font-family: "fedfont";
+  src:url("#{$path}fedfont.eot");
+  src:url("#{$path}fedfont.eot?#iefix") format("embedded-opentype"),
+  url("#{$path}fedfont.woff") format("woff"),
+  url("#{$path}fedfont.ttf") format("truetype"),
+  url("#{$path}fedfont.svg#fedfont") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+html {
+  font-family: sans-serif;
+}
+
+body {
+  font-weight: $default-font-weight;
+  color: $medium-darker-gray;
+  padding: 0;
+  margin: 0;
+}
+h1, h2, h3 {
+  font-weight: $default-font-weight;
+}
+p {
+  line-height: 1.7;
+}

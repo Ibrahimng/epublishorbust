@@ -1,10 +1,12 @@
 <?php
+
 /**
  * @file
- * Default theme implementation to display a single Drupal page.
+ * Bartik's theme implementation to display a single Drupal page.
  *
  * The doctype, html, head and body tags are not in this template. Instead they
- * can be found in the html.tpl.php template in this directory.
+ * can be found in the html.tpl.php template normally located in the
+ * modules/system directory.
  *
  * Available variables:
  *
@@ -26,6 +28,12 @@
  *   in theme settings.
  * - $site_slogan: The slogan of the site, empty when display has been disabled
  *   in theme settings.
+ * - $hide_site_name: TRUE if the site name has been toggled off on the theme
+ *   settings page. If hidden, the "element-invisible" class is added to make
+ *   the site name visually hidden, but still accessible.
+ * - $hide_site_slogan: TRUE if the site slogan has been toggled off on the
+ *   theme settings page. If hidden, the "element-invisible" class is added to
+ *   make the site slogan visually hidden, but still accessible.
  *
  * Navigation:
  * - $main_menu (array): An array containing the Main menu links for the
@@ -55,114 +63,128 @@
  *   comment/reply/12345).
  *
  * Regions:
- * - $page['help']: Dynamic help text, mostly for admin pages.
+ * - $page['header']: Items for the header region.
+ * - $page['featured']: Items for the featured region.
  * - $page['highlighted']: Items for the highlighted content region.
+ * - $page['help']: Dynamic help text, mostly for admin pages.
  * - $page['content']: The main content of the current page.
  * - $page['sidebar_first']: Items for the first sidebar.
- * - $page['sidebar_second']: Items for the second sidebar.
- * - $page['header']: Items for the header region.
+ * - $page['triptych_first']: Items for the first triptych.
+ * - $page['triptych_middle']: Items for the middle triptych.
+ * - $page['triptych_last']: Items for the last triptych.
+ * - $page['footer_firstcolumn']: Items for the first footer column.
+ * - $page['footer_secondcolumn']: Items for the second footer column.
+ * - $page['footer_thirdcolumn']: Items for the third footer column.
+ * - $page['footer_fourthcolumn']: Items for the fourth footer column.
  * - $page['footer']: Items for the footer region.
  *
- * @see bootstrap_preprocess_page()
  * @see template_preprocess()
  * @see template_preprocess_page()
- * @see bootstrap_process_page()
  * @see template_process()
+ * @see bartik_process_page()
  * @see html.tpl.php
- *
- * @ingroup themeable
  */
+
 ?>
-<header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
-  <div class="container">
-    <div class="navbar-header">
-      <?php if ($logo): ?>
-      <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
-        <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
-      </a>
-      <?php endif; ?>
+<!-- THEME WRAPPER -->
+<div id="page-wrapper">
+  <div id="page">
 
-      <?php if (!empty($site_name)): ?>
-      <a class="name navbar-brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a>
-      <?php endif; ?>
+    <!-- SITE HEADER -->
+    <header class="site_header">
+      <div class="site_header-top">
+        <img src="/sites/default/files/epob/images/qwerty.png" alt="ePublish or BUST mascot image" srcset="/sites/default/files/epob/images/qwerty.png 80w, /sites/default/files/epob/images/qwerty@2x.png 160w" sizes="80px" class="site_header-logo" />
+        <?php if ($site_name): ?>
+          <?php if ($title): ?>
+            <div id="site-name">
+              <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home" class="site_header-site_name"><span><?php print $site_name; ?></span></a>
+            </div>
+          <?php else: /* Use h1 when the content title is empty */ ?>
+            <h1 id="site-name"<?php if ($hide_site_name) { print ' class="element-invisible"'; } ?>>
+              <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home" class="site_header-site_name"><span><?php print $site_name; ?></span></a>
+            </h1>
+          <?php endif; ?>
+        <?php endif; ?>
+        <div class="site_header-top_right">
+          <a href="/user/login/" class="site_header-account_link">Account</a>
+          <!--
+          <form action="#" method="post" class="search_form">
+            <input type="text" name="search_phrase" class="search_form-phrase">
+            <button type="submit" title="Submit search" class="search_form-submit" value=""></button>
+          </form>
+          -->
+          <?php print $variables['sitesearch']; ?>
+        </div>
+      </div>
+      <div class="site_header-bottom">
+        <div class="site_header-bottom_inner">
+          <?php if ($site_slogan): ?>
+            <div id="site-slogan" class="site_header-site_slogan">
+              <?php print $site_slogan; ?>
+            </div>
+          <?php endif; ?>
+          <?php if ($main_menu): ?>
+            <nav id="main-menu" class="navigation site_header-nav">
+              <?php print theme('links__system_main_menu', array(
+                'links' => $main_menu,
+                'attributes' => array(
+                  'id' => 'main-menu-links',
+                  'class' => array('links', 'clearfix'),
+                ),
+                'heading' => array(
+                  'text' => t('Main menu'),
+                  'level' => 'h2',
+                  'class' => array('element-invisible'),
+                ),
+              )); ?>
+            </nav> <!-- /#main-menu -->
+          <?php endif; ?>
+        </div>
+      </div>
+    </header>
 
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
+<div class="site_content"><?php print render($page['content']); ?></div>
 
-    <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
-      <div class="navbar-collapse collapse">
-        <nav role="navigation">
-          <?php if (!empty($primary_nav)): ?>
-            <?php print render($primary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($secondary_nav)): ?>
-            <?php print render($secondary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($page['navigation'])): ?>
-            <?php print render($page['navigation']); ?>
-          <?php endif; ?>
+    <!-- SITE FOOTER -->
+    <footer class="site_footer">
+      <!--
+      <nav class="site_footer-social_nav">
+          <a href="#" target="_blank" class="site_footer-facebook_link" title="Facebook icon"></a>
+          <a href="#" target="_blank" class="site_footer-twitter_link" title="Twitter icon"></a>
+          <a href="#" target="_blank" class="site_footer-linkedin_link" title="LinkedIn icon"></a>
+      </nav>
+      -->
+      <!--
+      <div class="site_footer-contact_info">
+        <p class="site_footer-copyright">&copy; 2015 The Company, LLC.</p>
+        <p class="site_footer-phone">1-800-333-3456</p>
+        <p>33872 Main St. Dallas, FL. 012231</p>
+      </div>
+      -->
+      <div class="site_footer-nav_wrapper">
+        <nav class="site_footer-nav">
+          <a href="/user/login/">Account</a>
+          <a href="/calendar/">Calendar</a>
+          <a href="/blogs/">Blogs</a>
+          <a href="/help/">Help</a>
+          <a href="/contact/">Contact Us</a>
+          <a href="/#top">Home</a>
+        </nav>
+        <nav class="site_footer-nav site_footer-nav--alt">
+          <a href="/#learn">How it Works</a>
+          <a href="/#discover">Discover Your Voice</a>
+          <a href="/#tell">Tell Your Story</a>
+          <a href="/#build">Build Your Audience</a>
         </nav>
       </div>
-    <?php endif; ?>
-  </div>
-</header>
+    </footer>
 
-<div class="main-container container">
-
-  <header role="banner" id="page-header">
-    <?php if (!empty($site_slogan)): ?>
-      <p class="lead"><?php print $site_slogan; ?></p>
-    <?php endif; ?>
-
-    <?php print render($page['header']); ?>
-  </header> <!-- /#page-header -->
-
-  <div class="row">
-
-    <?php if (!empty($page['sidebar_first'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_first']); ?>
-      </aside>  <!-- /#sidebar-first -->
-    <?php endif; ?>
-
-    <section<?php print $content_column_class; ?>>
-      <?php if (!empty($page['highlighted'])): ?>
-        <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
-      <?php endif; ?>
-      <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
-      <a id="main-content"></a>
-      <?php print render($title_prefix); ?>
-      <?php if (!empty($title)): ?>
-        <h1 class="page-header"><?php print $title; ?></h1>
-      <?php endif; ?>
-      <?php print render($title_suffix); ?>
-      <?php print $messages; ?>
-      <?php if (!empty($tabs)): ?>
-        <?php print render($tabs); ?>
-      <?php endif; ?>
-      <?php if (!empty($page['help'])): ?>
-        <?php print render($page['help']); ?>
-      <?php endif; ?>
-      <?php if (!empty($action_links)): ?>
-        <ul class="action-links"><?php print render($action_links); ?></ul>
-      <?php endif; ?>
-      <?php print render($page['content']); ?>
-    </section>
-
-    <?php if (!empty($page['sidebar_second'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_second']); ?>
-      </aside>  <!-- /#sidebar-second -->
-    <?php endif; ?>
-
+  <!-- THEME WRAPPER CLOSING TAGS -->
   </div>
 </div>
-<footer class="footer container">
-  <?php print render($page['footer']); ?>
-</footer>
+
+<!-- PLACEHOLDER JS FOR TEXTFIELD PLACEHOLDER POLYFILL -->
+<script src="bower_components/placeholders/dist/placeholders.js"></script>
+
+<!-- PICTUREFILL JS FOR IMAGE SRCSET POLYFILL -->
+<script src="bower_components/picturefill/dist/picturefill.js" async></script>

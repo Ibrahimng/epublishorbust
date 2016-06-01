@@ -1,0 +1,116 @@
+.site_footer {
+  $one_column_breakpoint: 1010px;
+
+  background-color: $dark-gray;
+  color: $medium-dark-gray;
+  padding: px2rem(34) px2rem(30);
+
+  &-contact_info {
+    margin-top: px2rem(-7);
+    text-align: center;
+    margin-bottom: px2rem(20);
+    @include breakpoint($one_column_breakpoint) {
+      float: left;
+      text-align: left;
+      margin-bottom: 0;
+    }
+    > p {
+      $margin: px2em(3);
+      margin-top: $margin;
+      margin-bottom: $margin;
+    }
+  }
+
+  &-copyright {
+    color: $white;
+    font-weight: 400;
+  }
+
+  &-phone {
+    &:before {
+      font-family: FontAwesome;
+      content: "\f095";
+      margin-right: .2em;
+    }
+  }
+
+  &-nav_wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    @include breakpoint($one_column_breakpoint) {
+      width: 50rem;
+    }
+  }
+
+  &-nav {
+    text-align: center;
+    margin-bottom: px2em(9);
+    a {
+      &:hover, &:visited, &:link, &:active {
+        color: $white;
+        text-transform: uppercase;
+        text-decoration: none;
+        margin-left: px2em(10);
+        margin-right: px2em(10);
+      }
+    }
+  }
+
+  &-nav--alt {
+    padding-top: px2em(13);
+    border-top: $medium-darkest-gray solid 1px;
+    a {
+      &:hover, &:visited, &:link, &:active {
+        color: $medium-dark-gray;
+      }
+    }
+  }
+
+  &-social_nav {
+    text-align: center;
+    margin-bottom: px2rem(20);
+    @include breakpoint($one_column_breakpoint) {
+      float: right;
+      text-align: left;
+      margin-bottom: 0;
+    }
+    > a {
+      $size: 25;
+      font-size: px2rem(.64 * $size);
+      width: px2rem($size);
+      height: px2rem($size);
+      background-color: $white;
+      color: $dark-gray;
+      border-radius: 3em;
+      line-height: px2rem($size);
+      box-sizing: border-box;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      margin: 0 .1em 0 .1em;
+
+      &:before {
+        font-family: FontAwesome;
+      }
+    }
+  }
+
+  &-facebook_link {
+    &:before {
+      content: "\f09a";
+    }
+  }
+
+  &-twitter_link {
+    &:before {
+      content: "\f099";
+    }
+  }
+
+  &-linkedin_link {
+    &:before {
+      content: "\f0e1";
+    }
+  }
+}

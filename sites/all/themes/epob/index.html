@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>NEW Basic HTML and CSS examples</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="bower_components/microplugin/src/microplugin.js"></script>
+  <script type="text/javascript" src="bower_components/sifter/sifter.js"></script>
+  <script type="text/javascript" src="bower_components/selectize/dist/js/selectize.js"></script>
+  <link rel="stylesheet" type="text/css" href="bower_components/selectize/dist/css/selectize.css" />
+  <link rel="stylesheet" href="bower_components/flexslider/flexslider.css" type="text/css">
+  <script src="bower_components/flexslider/jquery.flexslider.js"></script>
+  <script>
+
+    $(function() {
+      $('select').selectize({dropdownParent: 'body'});
+    });
+    $(window).load(function() {
+      $('.slideshow').flexslider({pauseOnHover: true, slideshow:false});
+
+      $('.snippet_slideshow').flexslider({
+        animation: "slide",
+        itemWidth: 515,
+        controlNav: false
+      });
+    });
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="bower_components/normalize.css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body>
+
+<header class="site_header">
+  <div class="site_header-top">
+    <!--
+    <img src="images/qwerty.png" alt="ePublish or BUST mascot image" srcset="images/qwerty.png 80w, images/qwerty@2x.png 160w" sizes="80px" class="site_header-logo" />
+    -->
+    <img src="images/epob_logo.png" class="site_header-logo"/>
+   <!-- <img src="images/logo.png" srcset="images/logo.png 208w, images/logo@2x.png 415w, images/logo1000.png 1000w, images/logo2000.png 2000w" sizes="80px" class="site_header-logo"> -->
+
+    <div class="site_header-top_right">
+      <a href="#" class="site_header-account_link">Account</a>
+
+
+      <form action="#" method="post" class="search_form">
+        <select name="search_type" class="search_form-type">
+          <option value="site">Site</option>
+          <option value="support">Customer support</option>
+          <option value="staff">Staff</option>
+        </select>
+
+        <input type="text" name="search_phrase" class="search_form-phrase">
+
+        <button type="submit" title="Submit search" class="search_form-submit" value=""></button>
+      </form>
+    </div>
+  </div>
+
+  <div class="site_header-bottom">
+    <div class="site_header-bottom_inner">
+      <nav class="site_header-nav">
+        <a href="#" class="is-active">Home</a>
+        <a href="#">Blog</a>
+        <a href="#">Pricing</a>
+        <a href="#">Team</a>
+      </nav>
+
+      <a href="#" class="button button--pill site_header-phone">1-800-333-3456</a>
+    </div>
+  </div>
+</header>
+
+
+<div class="slideshow flexslider">
+  <ul class="slides">
+    <li>
+      <section class="slideshow-slide">
+        <h1 class="slideshow-slide_title">More than just a company</h1>
+        <p>We're a collective </p>
+        <a href="#" class="button">Learn more</a>
+      </section>
+    </li>
+
+    <li>
+      <section class="slideshow-slide">
+        <h1 class="slideshow-slide_title">Second slide</h1>
+        <p>We're a collective of talented people building amazing things. We listen to your needs and formulate solutions that will increase your teams productivity and your client's satisfaction. We make happiness factories. We're a collective of talented people building amazing things. We listen to your needs and formulate solutions that will increase your teams productivity and your client's satisfaction. We make happiness factories.</p>
+        <a href="#" class="button">Learn more</a>
+      </section>
+    </li>
+  </ul>
+</div>
+
+<section class="stacked_hero_section stacked_hero_section--qualities">
+  <h2 class="stacked_hero_section-title">Qualities</h2>
+
+  <div class="icon_box-wrapper">
+    <section class="icon_box icon_box--passion">
+      <div class="icon_box-icon"></div>
+      <h3 class="icon_box-title">Passion</h3>
+      <p>We pour our hearts into our work because we believe in it, and we know it will make the result so much better.</p>
+    </section>
+
+    <section class="icon_box icon_box--speed">
+      <div class="icon_box-icon"></div>
+      <h3 class="icon_box-title">Speed</h3>
+      <p>More than anything, we know our solutions need to be fast, and so we never lose our focus on speed.</p>
+    </section>
+
+    <section class="icon_box icon_box--creativity">
+      <div class="icon_box-icon"></div>
+      <h3 class="icon_box-title">Creativity</h3>
+      <p>We know you're forging new territory with your business, and you need creative solutions to get there.</p>
+    </section>
+
+    <section class="icon_box icon_box--magic">
+      <div class="icon_box-icon"></div>
+      <h3 class="icon_box-title">Magic</h3>
+      <p>Over and above our creative process, we deliver solutions that are more than the sum of their parts.</p>
+    </section>
+  </div>
+
+</section>
+
+
+<section class="stacked_hero_section stacked_hero_section--alt">
+  <h2 class="stacked_hero_section-title">Written by Our Team</h2>
+
+  <div class="snippet_slideshow flexslider">
+    <ul class="slides">
+      <li>
+        <section class="snippet">
+          <div class="snippet-author_thumb" title="Jeff Smitty's Photo" style="background-image:url('images/author-1.jpg');"></div>
+          <div class="snippet-content">
+            <h3 class="snippet-title">The top 10 things you need to know</h3>
+            <p class="snippet-attribution">By <a href="http://someothersite.com">Jeff Smitty</a> on January 14, 2015</p>
+            <p>Before you do anything in this crazy world, there are some things you need to know. You didn't learn these things in Kindergarten, and chances are college left a bit of a void when it comes to practical skill. We spoke to numerous successful business owners to figure out what really made their stories so different, and the results were more than compelling. So, read on to learn...</p>
+            <a href="#" class="button">Read on</a>
+          </div>
+        </section>
+      </li>
+
+      <li>
+        <section class="snippet">
+          <div class="snippet-author_thumb" title="Jeff Smitty's Photo" style="background-image:url('images/author-1.jpg');"></div>
+          <div class="snippet-content">
+            <h3 class="snippet-title">Questions to ask before you leap</h3>
+            <p class="snippet-attribution">By <a href="http://someothersite.com">Edith Jones</a> on January 14, 2015</p>
+            <p>Before you do anything in this crazy world, there are some things you need to know. You didn't learn these things in Kindergarten, and chances are college left a bit of a void when it comes to practical skill. We spoke to numerous successful business owners to figure out what really made their stories so different, and the results were more than compelling. So, read on to learn...</p>
+            <a href="#" class="button">Read on</a>
+          </div>
+        </section>
+      </li>
+
+      <li>
+        <section class="snippet">
+          <div class="snippet-author_thumb" title="Jeff Smitty's Photo" style="background-image:url('images/author-1.jpg');"></div>
+          <div class="snippet-content">
+            <h3 class="snippet-title">Questions to ask before you leap</h3>
+            <p class="snippet-attribution">By <a href="http://someothersite.com">Edith Jones</a> on January 14, 2015</p>
+            <p>Before you do anything in this crazy world, there are some things you need to know. You didn't learn these things in Kindergarten, and chances are college left a bit of a void when it comes to practical skill. We spoke to numerous successful business owners to figure out what really made their stories so different, and the results were more than compelling. So, read on to learn...</p>
+            <a href="#" class="button">Read on</a>
+          </div>
+        </section>
+      </li>
+
+      <li>
+        <section class="snippet">
+          <div class="snippet-author_thumb" title="Jeff Smitty's Photo" style="background-image:url('images/author-1.jpg');"></div>
+          <div class="snippet-content">
+            <h3 class="snippet-title">Questions to ask before you leap</h3>
+            <p class="snippet-attribution">By <a href="http://someothersite.com">Edith Jones</a> on January 14, 2015</p>
+            <p>Before you do anything in this crazy world, there are some things you need to know. You didn't learn these things in Kindergarten, and chances are college left a bit of a void when it comes to practical skill. We spoke to numerous successful business owners to figure out what really made their stories so different, and the results were more than compelling. So, read on to learn...</p>
+            <a href="#" class="button">Read on</a>
+          </div>
+        </section>
+      </li>
+    </ul>
+  </div>
+
+</section>
+
+<section class="stacked_hero_section">
+  <h2 class="stacked_hero_section-title">Contact Us</h2>
+
+  <form class="contact_form" action="#" method="post">
+
+    <p class="contact_form-type_label">Which best describes you?</p>
+
+    <div class="contact_form-type">
+      <div class="contact_form-radio_wrapper">
+        <input type="radio" name="type" id="contact_form-client" value="client">
+        <label for="contact_form-client">Client</label>
+      </div>
+      <div class="contact_form-radio_wrapper">
+        <input type="radio" name="type" id="contact_form-partner" value="partner">
+        <label for="contact_form-partner">Partner</label>
+      </div>
+      <div class="contact_form-radio_wrapper">
+        <input type="radio" name="type" id="contact_form-curious" value="curious">
+        <label for="contact_form-curious">Just curious</label>
+      </div>
+    </div>
+
+    <input type="text" name="email" placeholder="Email address" class="contact_form-email">
+
+    <input type="text" name="name" placeholder="Your name" class="contact_form-name">
+
+    <select class="contact_form-interest" name="interest">
+      <option value="">I am interested in... (please select)</option>
+      <option value="info">More information</option>
+      <option value="help">Help with a product</option>
+    </select>
+
+    <textarea class="contact_form-comments" name="comments" placeholder="Add comments here..."></textarea>
+
+    <input type="submit" value="Send" class="contact_form-submit button">
+  </form>
+</section>
+
+
+<footer class="site_footer">
+
+  <nav class="site_footer-social_nav">
+    <a href="#" target="_blank" class="site_footer-facebook_link" title="Facebook icon"></a>
+    <a href="#" target="_blank" class="site_footer-twitter_link" title="Twitter icon"></a>
+    <a href="#" target="_blank" class="site_footer-linkedin_link" title="LinkedIn icon"></a>
+  </nav>
+
+  <div class="site_footer-contact_info">
+    <p class="site_footer-copyright">&copy; 2015 The Company, LLC.</p>
+    <p class="site_footer-phone">1-800-333-3456</p>
+    <p>33872 Main St. Dallas, FL. 012231</p>
+  </div>
+
+  <div class="site_footer-nav_wrapper">
+    <nav class="site_footer-nav">
+      <a href="#">Home</a>
+      <a href="#">Blog</a>
+      <a href="#">Pricing</a>
+      <a href="#">Team</a>
+    </nav>
+
+    <nav class="site_footer-nav site_footer-nav--alt">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">White Papers</a>
+      <a href="#">Account</a>
+    </nav>
+  </div>
+
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+<script src="bower_components/placeholders/dist/placeholders.js"></script>
+<script src="bower_components/picturefill/dist/picturefill.js"></script>
+
+</body>
+</html>

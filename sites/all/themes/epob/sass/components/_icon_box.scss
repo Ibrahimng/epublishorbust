@@ -1,0 +1,141 @@
+.icon_box {
+  $width: 100;
+  $padding: 22;
+  $box_width: 275;
+  background-color: $light-gray;
+  width: px2rem($box_width);
+  height: px2rem($box_width);
+  padding: px2rem($padding);
+  box-sizing: border-box;
+  text-align: left;
+  display: inline-block;
+  margin: px2rem(50) px2rem(6) px2rem(20) px2rem(6);
+
+  &-wrapper {
+    text-align: center;
+    a {
+      &:hover, &:visited, &:link, &:active {
+        color: $medium-darker-gray;
+        text-decoration: none;
+      }
+    }
+  }
+
+  > p { // TODO: Unify paragraph styles
+    font-size: px2rem(14);
+  }
+
+  &-title {
+    font-size: px2rem(16);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    text-align: center;
+    margin-top: px2rem(42);
+    margin-bottom: px2rem(10);
+  }
+
+  &-icon {
+    font-family: fedfont;
+    display: inline-block;
+    padding: px2rem(30) 0 px2rem(30) 0;
+    border-radius: 4em;
+    color: $white;
+    font-size: px2rem(40);
+    width: px2rem($width);
+    text-align: center;
+    position: absolute;
+    margin-top: px2rem(($width/2 + $padding)*-1);
+    margin-left: px2rem($box_width/2 - $padding - $width/2);
+  }
+
+  &--discover {
+    .icon_box-icon {
+      background-color: $darkred;
+
+      &:before {
+        content: "g";
+      }
+    }
+  }
+
+  &--tell {
+    .icon_box-icon {
+      background-color: $yellow;
+
+      &:before {
+        content: "b";
+      }
+    }
+  }
+
+  &--build {
+    .icon_box-icon {
+      background-color: $green;
+
+      &:before {
+        content: "h";
+      }
+    }
+  }
+
+  &--book {
+    background-color: $white;
+    .icon_box-icon {
+      background-color: $red;
+
+      &:before {
+        content: "e";
+      }
+    }
+  }
+
+  &--find {
+    background-color: $white;
+    .icon_box-icon {
+      background-color: $blue;
+
+      &:before {
+        content: "f";
+      }
+    }
+  }
+
+  &--publish {
+    background-color: $white;
+    .icon_box-icon {
+      background-color: $yellow;
+      &:before {
+        content: "b";
+      }
+    }
+  }
+  &--blank {
+    background-color: $white;
+    width: px2rem($box_width*2);
+    height: px2rem($box_width);
+    .icon_box-icon {
+      display: inline-block;
+      width: 364px;
+      text-align: center;
+      position: absolute;
+      margin-top: px2rem(($width)*-1);
+      margin-left: px2rem($box_width - $padding - 364px);
+    }
+    a {
+      text-decoration: none;
+      border-top: lighten($green, 20%) 1px solid;
+      border-bottom: darken($green, 15%) 1px solid;
+      border-left: none;
+      border-right: none;
+      color: $white;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+      &:hover, &:visited, &:link, &:active {
+        color: $white;
+      }
+    }
+    p {
+      padding-top: px2rem($padding);
+      font-size: px2rem(18);
+    }
+  }
+}

@@ -1,0 +1,161 @@
+/// === Override Drupal default styles === ///
+#site-name {
+  display: inline-block;
+  margin: 0;
+}
+
+#site-slogan {
+  display: inline-block;
+  margin: 0;
+}
+
+/// === Custom Site Header styles === ///
+.site_header {
+  background-color: $darker-gray; // Me
+  $one_column_breakpoint: 670px;
+
+  &-top {
+    @extend %l-full_width;
+    overflow: auto;
+    padding: px2rem(12) 0;
+  }
+
+  &-bottom {
+    background-color: $light-gray;
+    padding: px2rem(8) 0;
+    overflow: auto;
+  }
+
+  &-bottom_inner {
+    @extend %l-full_width;
+  }
+
+  &-top_right {
+    width: 365px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: px2rem(18) 0 px2rem(6) 0;
+    @include breakpoint($one_column_breakpoint) {
+      float: right;
+      width: auto;
+      margin: inherit;
+      text-align: inherit;
+    }
+  }
+
+  &-logo {
+    z-index: 500;
+    width: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+    position: absolute;
+    padding-top: px2rem(8);
+
+    @include breakpoint(490px) {
+      width: 80px;
+    }
+
+    @include breakpoint($one_column_breakpoint) {
+      float: left;
+      width: auto;
+      margin: 0;
+      display: inline-block;
+    }
+  }
+
+  &-site_name { //TODO Streamline site name
+    font-family: "American Typewriter", "Courier New", monospace;
+    padding-left: px2rem(90);
+    position: absolute;
+    &:hover, &:visited, &:link, &:active {
+      color: $white;
+      text-decoration: none;
+      font-size: px2rem(36);
+    }
+  }
+
+  &-site_slogan { //TODO Streamline site slogan
+    font-family: "American Typewriter", "Courier New", monospace;
+    //position: absolute;
+    color: $dark-gray;
+    font-size: px2rem(18);
+    font-weight: 400;
+    padding: px2rem(8) 0 0 px2rem(90);;
+  }
+
+  &-nav {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: px2rem(18);
+    @include breakpoint($one_column_breakpoint) {
+      float: right;
+      text-align: left;
+      margin-bottom: 0;
+    }
+    ul {
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      display: inline-block;
+    }
+    a {
+      &:hover, &:visited, &:link, &:active {
+        display: inline-block;
+        color: $medium-darker-gray;
+        text-decoration: none;
+        padding: .4em .7em;
+      }
+    }
+    a.active {
+      border: $medium-dark-gray 1px solid;
+      background-color: $medium-gray;
+      border-radius: .2em;
+    }
+  }
+
+  &-phone {
+    width: px2rem(170);
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include breakpoint($one_column_breakpoint) {
+      float: right;
+      width: auto;
+      text-align: left;
+      display: inline-block;
+      margin: 0;
+    }
+    &:before {
+      font-family: FontAwesome;
+      content: "\f095";
+    }
+  }
+
+  &-account_link {
+    display: inline-block;
+    line-height: px2rem(29);
+    margin-right: px2rem(20);
+
+    &:hover, &:visited, &:link, &:active {
+      color: $white;
+      text-decoration: none;
+      font-size: px2rem(18);
+    }
+    &:before {
+      font-family: FontAwesome;
+      content: "\f007";
+      margin-right: .35em;
+      font-size: .9em;
+    }
+  }
+
+  .search_form {
+    display: inline-block;
+    vertical-align: top;
+  }
+}

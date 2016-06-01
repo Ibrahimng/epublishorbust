@@ -1,0 +1,114 @@
+.stacked_hero_section {
+  overflow: auto;
+  padding: 90px 0;
+  @extend %l-full_width;
+
+  &-title {
+    font-size: px2rem(34);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: $medium-gray;
+    text-align: center;
+    padding-bottom: .8em;
+    margin-bottom: .9em;
+    margin-top: 0;
+  }
+
+  &--discover {
+    width: auto;
+    margin: 0;
+    background-color: $light-gray;
+    > #block-views-discover-your-voice-block h2 {
+      border-bottom-color: $white;
+      width: auto;
+      margin-left: 20px;
+      margin-right: 20px;
+      font-size: px2rem(34);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      text-align: center;
+      padding-bottom: .8em;
+      margin-bottom: .9em;
+      margin-top: 0;
+      @include breakpoint ($max_width) {
+        width: $max_width;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
+/*
+  &--tell {
+    width: auto;
+    margin: 0;
+    > .stacked_hero_section-title {
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      border-bottom-color: $medium-gray;
+      width: auto;
+      margin-left: 20px;
+      margin-right: 20px;
+      @include breakpoint ($max_width) {
+        width: $max_width;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
+*/
+  &--tell {
+    .icon_box-wrapper {
+      max-width: 612px;
+      margin-left: auto;
+      margin-right: auto;
+      @include breakpoint(1000px) {
+        width: auto;
+        max-width: none;
+      }
+    }
+  }
+
+  &--publish {
+    .icon_box-wrapper {
+      max-width: 612px;
+      margin-left: auto;
+      margin-right: auto;
+      @include breakpoint(1000px) {
+        width: auto;
+        max-width: none;
+      }
+    }
+  }
+
+  &--build {
+    width: auto;
+    margin: 0;
+    background-color: $light-gray;
+    > .stacked_hero_section-title {
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      border-bottom-color: $white;
+      width: auto;
+      margin-left: 20px;
+      margin-right: 20px;
+      @include breakpoint ($max_width) {
+        width: $max_width;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    .icon_box-wrapper {
+      max-width: 612px;
+      margin-left: auto;
+      margin-right: auto;
+      @include breakpoint(1000px) {
+        width: auto;
+        max-width: none;
+      }
+    }
+  }
+}

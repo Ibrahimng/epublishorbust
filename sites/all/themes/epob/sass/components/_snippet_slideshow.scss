@@ -1,0 +1,67 @@
+.snippet_slideshow {
+  $nav_offset: -50px;
+  $breakpoint_single_item: 1070px;
+  $breakpoint_smallest: 670px;
+
+  background: none;
+  border: 0;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+
+  @include breakpoint ($breakpoint_smallest) {
+    width: 515px; // TODO: Share this value with slideshow JS as a variable
+  }
+
+  @include breakpoint ($breakpoint_single_item) {
+    width: $max_width; 
+  }
+
+  .flex-direction-nav a:before {
+    font-family: FontAwesome;
+    color: $medium-darker-gray;
+  }
+
+  .flex-direction-nav a.flex-next {
+    display: none;
+    @include breakpoint ($breakpoint_smallest) {
+      display: block;
+      right: $nav_offset;
+    }
+
+    &:before {
+      content: "\f0a9";
+    }
+  }
+
+  .flex-direction-nav a.flex-prev {
+    display: none;
+    @include breakpoint ($breakpoint_smallest) {
+      display: block;
+      left: $nav_offset;
+    }
+    &:before {
+      content: "\f0a8";
+    }
+  }
+
+  &:hover .flex-direction-nav .flex-prev {
+    @include breakpoint ($breakpoint_smallest) {
+      left: $nav_offset;
+    }
+  }
+
+  &:hover .flex-direction-nav .flex-next {
+    @include breakpoint ($breakpoint_smallest) {
+      right: $nav_offset;
+    }
+  }
+
+  .snippet-author_thumb {
+    display: none;
+    @include breakpoint ($breakpoint_smallest) {
+      display: block;
+    }
+  }
+}
