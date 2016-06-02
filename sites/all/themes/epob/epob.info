@@ -1,11 +1,10 @@
-
 ;----------// Theme Information
   name        = ePublish or BUST!
   description = A sub theme based on Bartik.
   core        = 7.x
   release     = 7.x-3.x
   screenshot  = screenshot.png
-  base theme  = bartik
+ ; base theme  = bartik
 
 
 ;----------// Stylesheets
@@ -97,9 +96,6 @@
   regions[footer_fourthcolumn] = Footer fourth column
   regions[footer] = Footer
 
-  settings[shortcut_module_link] = 0
+  ;settings[shortcut_module_link] = 0
 
 
-  ; Information added by Drupal.org packaging script on 2016-02-24
-  version = "7.43"
-  project = "drupal"
