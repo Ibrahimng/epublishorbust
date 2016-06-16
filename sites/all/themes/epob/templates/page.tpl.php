@@ -145,7 +145,7 @@
 
     <!-- Contextual Tabs -->
     <?php if ($tabs): ?>
-      <div class="tabs">
+      <div class="tabs site_content-tabs">
         <?php print render($tabs); ?>
       </div>
     <?php endif; ?>
