@@ -143,6 +143,13 @@
       </div>
     </header>
 
+    <!-- Contextual Tabs -->
+    <?php if ($tabs): ?>
+      <div class="tabs">
+        <?php print render($tabs); ?>
+      </div>
+    <?php endif; ?>
+
 <div class="site_content"><?php print render($page['content']); ?></div>
 
     <!-- SITE FOOTER -->
