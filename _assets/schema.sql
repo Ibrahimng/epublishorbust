@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.44-37.3, for osx10.10 (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.32, for Linux (x86_64)
 --
--- Host: localhost    Database: epublishorbust
+-- Host: localhost    Database: epubpxno_main
 -- ------------------------------------------------------
--- Server version	5.5.44-37.3-log
+-- Server version	5.5.32-cll-lve
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -290,6 +290,24 @@ CREATE TABLE `cache_bootstrap` (
   PRIMARY KEY (`cid`),
   KEY `expire` (`expire`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cache table for data required to bootstrap Drupal, may be...';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cache_coffee`
+--
+
+DROP TABLE IF EXISTS `cache_coffee`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache_coffee` (
+  `cid` varchar(255) NOT NULL DEFAULT '' COMMENT 'Primary Key: Unique cache ID.',
+  `data` longblob COMMENT 'A collection of data to cache.',
+  `expire` int(11) NOT NULL DEFAULT '0' COMMENT 'A Unix timestamp indicating when the cache entry should expire, or 0 for never.',
+  `created` int(11) NOT NULL DEFAULT '0' COMMENT 'A Unix timestamp indicating when the cache entry was created.',
+  `serialized` smallint(6) NOT NULL DEFAULT '0' COMMENT 'A flag to indicate whether content is serialized (1) or not (0).',
+  PRIMARY KEY (`cid`),
+  KEY `expire` (`expire`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cache table for Coffee to store pre-built command lists.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1700,7 +1718,7 @@ CREATE TABLE `flood` (
   PRIMARY KEY (`fid`),
   KEY `allow` (`event`,`identifier`,`timestamp`),
   KEY `purge` (`expiration`)
-) ENGINE=InnoDB AUTO_INCREMENT=2034 DEFAULT CHARSET=utf8 COMMENT='Flood controls the threshold of events, such as the...';
+) ENGINE=InnoDB AUTO_INCREMENT=2384 DEFAULT CHARSET=utf8 COMMENT='Flood controls the threshold of events, such as the...';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1976,7 +1994,7 @@ CREATE TABLE `menu_links` (
   KEY `menu_plid_expand_child` (`menu_name`,`plid`,`expanded`,`has_children`),
   KEY `menu_parents` (`menu_name`,`p1`,`p2`,`p3`,`p4`,`p5`,`p6`,`p7`,`p8`,`p9`),
   KEY `router_path` (`router_path`(128))
-) ENGINE=InnoDB AUTO_INCREMENT=2276 DEFAULT CHARSET=utf8 COMMENT='Contains the individual links within a menu.';
+) ENGINE=InnoDB AUTO_INCREMENT=2279 DEFAULT CHARSET=utf8 COMMENT='Contains the individual links within a menu.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2413,7 +2431,7 @@ CREATE TABLE `queue` (
   PRIMARY KEY (`item_id`),
   KEY `name_created` (`name`,`created`),
   KEY `expire` (`expire`)
-) ENGINE=InnoDB AUTO_INCREMENT=1906 DEFAULT CHARSET=utf8 COMMENT='Stores items in queues.';
+) ENGINE=InnoDB AUTO_INCREMENT=3172 DEFAULT CHARSET=utf8 COMMENT='Stores items in queues.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2759,7 +2777,7 @@ DROP TABLE IF EXISTS `sequences`;
 CREATE TABLE `sequences` (
   `value` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'The value of the sequence.',
   PRIMARY KEY (`value`)
-) ENGINE=InnoDB AUTO_INCREMENT=2810 DEFAULT CHARSET=utf8 COMMENT='Stores IDs.';
+) ENGINE=InnoDB AUTO_INCREMENT=2846 DEFAULT CHARSET=utf8 COMMENT='Stores IDs.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3118,7 +3136,7 @@ CREATE TABLE `url_alias` (
   PRIMARY KEY (`pid`),
   KEY `alias_language_pid` (`alias`,`language`,`pid`),
   KEY `source_language_pid` (`source`,`language`,`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3383 DEFAULT CHARSET=utf8 COMMENT='A list of URL aliases for Drupal paths; a user may visit...';
+) ENGINE=InnoDB AUTO_INCREMENT=3387 DEFAULT CHARSET=utf8 COMMENT='A list of URL aliases for Drupal paths; a user may visit...';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3489,7 +3507,7 @@ CREATE TABLE `workbench_moderation_node_history` (
   PRIMARY KEY (`hid`),
   KEY `nid` (`nid`),
   KEY `vid` (`vid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1300 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1303 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3583,4 +3601,4 @@ CREATE TABLE `workbench_scheduler_types` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-21 18:51:20
+-- Dump completed on 2016-07-28 15:03:34
