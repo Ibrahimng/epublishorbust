@@ -216,6 +216,11 @@ div.contact_form-interest .selectize-input {
   -webkit-box-shadow: none;
 }
 
+/* line 3, ../sass/components/_drupal_core.scss */
+.tabs .primary {
+  margin-top: 50px;
+}
+
 /* line 1, ../sass/components/_icon_box.scss */
 .icon_box {
   background-color: #e8e8e8;

@@ -4,3 +4,9 @@ sites/*/settings*.php
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+sites/default/*
+sites/default/css
+sites/default/ctools
+sites/default/js
+sites/default/files
+sites/all/themes/epob/.sass_cache
