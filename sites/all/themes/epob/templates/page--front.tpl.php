@@ -336,7 +336,7 @@
 </div>
 
 <!-- PLACEHOLDER JS FOR TEXTFIELD PLACEHOLDER POLYFILL -->
-<script src="bower_components/placeholders/dist/placeholders.js"></script>
+<script src="sites/default/files/epob/bower_components/placeholders/dist/placeholders.js"></script>
 
 <!-- PICTUREFILL JS FOR IMAGE SRCSET POLYFILL -->
-<script src="bower_components/picturefill/dist/picturefill.js" async></script>
+<script src="sites/default/files/epob/bower_components/picturefill/dist/picturefill.js" async></script>

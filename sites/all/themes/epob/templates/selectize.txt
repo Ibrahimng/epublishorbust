@@ -1,0 +1,6 @@
+  Selectize initiator removed from html.tpl.php
+
+
+   $(function() {
+      $('select').selectize({dropdownParent: 'body'});
+    });

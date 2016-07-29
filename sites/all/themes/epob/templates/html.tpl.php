@@ -52,10 +52,6 @@
   <?php print $styles; ?>
   <?php print $scripts; ?>
   <script>
-
-    $(function() {
-      $('select').selectize({dropdownParent: 'body'});
-    });
     $(window).load(function() {
       $('.slideshow').flexslider({pauseOnHover: true, slideshow:false});
 
