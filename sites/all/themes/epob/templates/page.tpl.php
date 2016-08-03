@@ -100,7 +100,7 @@
               <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home" class="site_header-site_name"><span><?php print $site_name; ?></span></a>
             </div>
           <?php else: /* Use h1 when the content title is empty */ ?>
-            <h1 id="site-name"<?php if ($hide_site_name) { print ' class="element-invisible"'; } ?>>
+            <h1 id="site-name">
               <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home" class="site_header-site_name"><span><?php print $site_name; ?></span></a>
             </h1>
           <?php endif; ?>
@@ -143,13 +143,21 @@
       </div>
     </header>
 
-    <!-- Contextual Tabs -->
+    <!-- CONTEXTUAL TABS -->
     <?php if ($tabs): ?>
       <div class="tabs site_content-tabs">
         <?php print render($tabs); ?>
       </div>
     <?php endif; ?>
 
+    <!-- MESSAGES -->
+    <?php if ($messages): ?>
+      <div id="messages"><div class="section clearfix">
+          <?php print $messages; ?>
+        </div></div> <!-- /.section, /#messages -->
+    <?php endif; ?>
+
+    <!-- CONTENT -->
 <div class="site_content"><?php print render($page['content']); ?></div>
 
     <!-- SITE FOOTER -->
