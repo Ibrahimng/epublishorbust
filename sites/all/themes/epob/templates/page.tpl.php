@@ -179,7 +179,7 @@
       <div class="site_footer-nav_wrapper">
         <nav class="site_footer-nav">
           <a href="/user/login/">Account</a>
-          <a href="/calendar/">Calendar</a>
+          <a href="/eventcalendar/">Calendar</a>
           <a href="/blogs/">Blogs</a>
           <a href="/help/">Help</a>
           <a href="/contact/">Contact Us</a>
@@ -187,7 +187,7 @@
         </nav>
         <nav class="site_footer-nav site_footer-nav--alt">
           <a href="/#learn">How it Works</a>
-          <a href="/#discover">Discover Your Voice</a>
+
           <a href="/#tell">Tell Your Story</a>
           <a href="/#build">Build Your Audience</a>
         </nav>

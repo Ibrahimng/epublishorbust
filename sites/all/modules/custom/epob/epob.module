@@ -1,0 +1,329 @@
+<?php
+
+/**
+ * @file
+ * Sets default values for Available Time content based on Coordinator's Library.
+ *
+ */
+
+/**
+ * @param $form
+ * @param $form_state
+ *
+ * Implements hook_form_alter().
+ * Alters the available time node form to set field defaults to values in the user's library node.
+ *
+ */
+function epob_form_available_time_node_form_alter(&$form, &$form_state) {
+  global $user;
+  if(!empty($user_library_id = epob_get_user_library_nid($user))) {
+    $library = epob_get_library_entity($user_library_id);
+  }
+
+  //Set Available Time variables from Library node.
+  $at_library = $library->field_user_library['und'][0]['tid'];
+  $at_description = $library->field_library_default_body['und'][0]['value'];
+  $at_description_summary = $library->field_library_default_body['und'][0]['summary'];
+  $at_description_format = $library->field_library_default_body['und'][0]['format'];
+  $at_confirm = $library->field_library_default_confirm['und'][0]['value'];
+  $at_confirm_format = $library->field_library_default_confirm['und'][0]['format'];
+
+  //Set Available Time node form default values.
+  $form['field_user_library']['und']['#default_value'] = $at_library;
+  $form['body']['und'][0]['#default_value'] = $at_description;
+  $form['body']['und'][0]['summary']['#default_value'] = $at_description_summary;
+  $form['body']['und'][0]['#format'] = $at_description_format;
+  $form['field_library_confirmation_txt']['und'][0]['#default_value'] = $at_confirm;
+  $form['field_library_confirmation_txt']['und'][0]['#format'] = $at_confirm_format;
+}
+
+/**
+ * @return mixed
+ *
+ * Get User's Library node data.
+ */
+function epob_get_user_library_nid($account) {
+  $query = db_select('field_data_field_user_library', 'f');
+  $query->join('taxonomy_index', 't', 'f.field_user_library_tid = t.tid');
+  $query->innerjoin('node', 'n', 't.nid = n.nid');
+  $query->addField('t', 'tid');
+  $query->addField('n', 'nid');
+  $query->addField('n', 'title');
+  $query->condition('f.entity_id', $account->uid);
+  $query->condition('f.bundle', 'user');
+  $query->condition('n.type', 'library');
+  $query->orderBy('f.revision_id', 'DESC');
+  $results = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+  return $results;
+}
+
+function epob_get_library_nid_by_term($tid) {
+  $query = db_select('field_data_field_user_library', 'f');
+  $query->join('taxonomy_index', 't', 'f.field_user_library_tid = t.tid');
+  $query->innerjoin('node', 'n', 't.nid = n.nid');
+  $query->addField('n', 'nid');
+  $query->condition('f.field_user_library_tid', $tid);
+  $query->condition('f.bundle', 'library');
+  $query->condition('n.type', 'library');
+  $query->orderBy('f.revision_id', 'DESC');
+  $results = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+  return $results[0]['nid'];
+}
+
+/**
+ * @param $lid
+ * @return array
+ *
+ * Returns the uids of library's coordinators.
+ */
+function epob_library_get_coordinator_ids($nid) {
+  $query = db_select('field_data_field_library_coordinators', 'lc');
+  $query->join('field_data_field_library_coordinator_id', 'cid', 'cid.entity_id=lc.field_library_coordinators_value');
+  $query->addField('cid', 'field_library_coordinator_id_uid');
+  $query->condition('lc.entity_id', $nid);
+  $query->condition('lc.bundle', 'library');
+  $results = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+  $coordinators = array();
+  foreach ($results as $result) {
+    foreach($result as $key => $value) {
+      $coordinators[] = $value;
+    }
+  }
+  return $coordinators;
+}
+
+/**
+ * @param $nid
+ * @return bool|mixed
+ * Loads library node by nid.
+ */
+function epob_get_library_entity($nid) {
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'library')
+    ->propertyCondition('nid', $nid)
+    ->propertyCondition('status', 1)
+    ->range(0,1)
+    ->execute();
+  if (!empty($entities['node'])) {
+    $node = node_load(current(array_keys($entities['node'])));
+  }
+  return $node;
+}
+
+/**
+ * @param $uid
+ * @return mixed
+ * Loads user by uid.
+ */
+function epob_get_user_entity($uid) {
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'user')
+    ->propertyCondition('uid', $uid)
+    ->propertyCondition('status', 1)
+    ->range(0,1)
+    ->execute();
+  if (!empty($entities['user'])) {
+    $account = user_load(current(array_keys($entities['user'])));
+  }
+  return $account;
+}
+
+/**
+ * @param $nid
+ * @return bool|mixed
+ * Loads available time node by nid.
+ */
+function epob_get_available_time_entity($nid) {
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'available_time')
+    ->propertyCondition('nid', $nid)
+    ->propertyCondition('status', 1)
+    ->range(0,1)
+    ->execute();
+  if (!empty($entities['node'])) {
+    $available_time = node_load(current(array_keys($entities['node'])));
+  }
+  return $available_time;
+}
+
+
+/**--------REQUEST FUNCTIONS (using flag module)--------*/
+/**-----------------------------------------------------*/
+
+/**
+ * @param $flag
+ * @param $node
+ * @param $user
+ * @param $flagging
+ *
+ * Implements hook_flag_flag().
+ */
+function epob_flag_flag($flag, $nid, $user, $flagging) {
+
+  global $base_url;
+
+  //Load the available time node flagged (requested) by user.
+  $available_time = epob_get_available_time_entity($nid);
+
+  //Set $term_id to the tid of the taxonomy term associated with the available time node.
+  $term_id = $available_time->field_user_library['und'][0]['tid'];
+
+  //Set $available_time_path to available time node path.
+  $available_time_path = $base_url . '/' . drupal_get_path_alias('node/'. $nid);
+
+  //Set $library_id to the nid of the library node associated with the flagged available time node.
+  $library_id = epob_get_library_nid_by_term($term_id);
+
+  //Load the library node associated with the flagged available time node.
+  $library = epob_get_library_entity($library_id);
+
+  //Set $coordinators to an array containing the uids of coordinators for the library node.
+  $coordinators = epob_library_get_coordinator_ids($library_id);
+
+  //Set value of string $coordinators_to to email addresses of library coordinators.
+  $coordinator_accounts = array();
+  $coordinators_to = '';
+  foreach($coordinators as $coordinator) {
+    $account = epob_get_user_entity($coordinator);
+    $coordinators_to .= $account->mail . ', ';
+    $coordinator_accounts[] = $account;
+  }
+  $coordinators_to = rtrim($coordinators_to, ', ');
+
+  //Set $requester_view_path to flagging user's account view path.
+  $requester_view_path = $base_url . '/users/' . str_replace(' ', '-', $user->name);
+
+  //Set $tokens array with tokens and replacement variables.
+  $tokens = array(
+    '[available time path]' => $available_time_path,
+  );
+
+  //Build email notification to requesting user.
+  $requester_subject = "You have requested to appear at the $library->title at " . $available_time->field__available_time_date['und'][0]['value'] . ".";
+  $requester_message = $available_time->field_library_confirmation_txt['und'][0]['value'];
+  $requester_message = epob_replace_message_tokens($requester_message, $tokens);
+  $requester_body = array(
+    $requester_message,
+  );
+  $requester_params = array(
+    'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
+    'subject' => $requester_subject,
+    'body' => $requester_body,
+  );
+  $requester_key = 'notify_requester';
+  $requester_to = $user->mail;
+  epob_send_notification($requester_key, $requester_to, $requester_params);
+
+  //Build email notification for coordinators.
+  $coordinators_subject = "$user->name has requested to appear at the $library->title at " . $available_time->field__available_time_date['und'][0]['value'] . ".";
+  $coordinators_message = "$user->name has requested to appear at the $library->title at " . $available_time->field__available_time_date['und'][0]['value'] . ".\n\n";
+  $coordinators_message .= "Email $user->name: $user->mail.\n";
+  $coordinators_message .= "View $user->name's account: $requester_view_path.\n\n";
+  $coordinators_message .= "View the requested time: $available_time_path";
+  $coordinators_message = epob_replace_message_tokens($coordinators_message, $tokens);
+  $coordinators_body = array(
+    $coordinators_message,
+  );
+  $coordinators_params = array(
+    'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
+    'subject' => $coordinators_subject,
+    'body' => $coordinators_body,
+  );
+  $coordinators_key = 'notify_coordinators';
+  epob_send_notification($coordinators_key, $coordinators_to, $coordinators_params);
+
+  return;
+}
+
+/**
+ * @param $key
+ * @param $to
+ * @param $params
+ *
+ * Sends notification emails based on actions taken on an Available Time node.
+ */
+function epob_send_notification($key, $to, $params) {
+  if($mail = drupal_mail('epob', $key, $to, language_default(), $params, 'qwerty@epublishorbust.com')) {
+    drupal_set_message('Sent!');
+  }
+  return;
+}
+
+/**
+ * @param $flag
+ * @param $node
+ * @param $user
+ * @param $flagging
+ *
+ * Implements hook_flag_unflag().
+ */
+function epob_flag_unflag($flag, $node, $user, $flagging) {
+  drupal_set_message('unflagged');// Do something in response to the flagging.
+  dsm($flagging);
+  return;
+}
+
+/**
+ * @param $string
+ * @param $token_arr
+ * @return mixed
+ *
+ * Replaces tokens in Library node textfields with variables in $tokens array.
+ */
+function epob_replace_message_tokens($string, $token_arr) {
+  foreach($token_arr as $key=>$value){
+    if(stristr($string, $key)) {
+      $string = str_replace($key, $value, $string);
+    }
+  }
+  return $string;
+}
+
+/**
+ * @param $key
+ * @param $message
+ * @param $params
+ *
+ * Implements hook_mail().
+ *
+ */
+function epob_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'notify_requester':
+      $message['subject'] = $params['subject'];
+      $message['body'] = $params['body'];
+      break;
+    case 'notify_coordinators':
+      $message['subject'] = $params['subject'];
+      $message['body'] = $params['body'];
+      break;
+  }
+  return;
+}
+
+
+/**--------TESTTING FUNCTIONS--------*/
+/**----------------------------------*/
+
+/**
+ * @param $results
+ * @return string
+ *
+ * Displays db query results in a table for testing purposes.
+ */
+function epob_display_query_results($results) {
+  $output ='';
+  $header = array();
+  $rows = array();
+  foreach ($results as $result) {
+    $rows[] = $result;
+    foreach($result as $key => $value) {
+      $header[] = $key;
+    }
+  }
+  $output .= theme('table', array('header' => $header, 'rows' => $rows ));
+  print $output;
+}
+

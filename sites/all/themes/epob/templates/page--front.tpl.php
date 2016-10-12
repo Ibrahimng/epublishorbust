@@ -169,14 +169,14 @@
     <a name="learn"></a>
     <section class="stacked_hero_section stacked_hero_section--learn">
       <h2 class="stacked_hero_section-title">How It Works</h2>
-      <div class="icon_box-wrapper">
-        <a href="#discover">
+     <div class="icon_box-wrapper">
+       <!--  <a href="#discover">
           <section class="icon_box icon_box--discover">
             <div class="icon_box-icon"></div>
             <h3 class="icon_box-title">Discover Your Voice</h3>
             <p>Read thoughts on writing from independent authors.<br />&nbsp;<br />&nbsp;<br />&nbsp;</p>
           </section>
-        </a>
+        </a> -->
         <a href="#publish">
           <section class="icon_box icon_box--tell">
             <div class="icon_box-icon"></div>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- DISCOVER YOUR VOICE -->
-    <a name="discover"></a>
+  <!--  <a name="discover"></a>
     <section class="stacked_hero_section stacked_hero_section--discover">
       <h2 class="stacked_hero_section-title">Discover Your Voice</h2>
       <div class="snippet_slideshow flexslider">
@@ -224,7 +224,7 @@
           </li>
         </ul>
       </div>
-    </section>
+    </section> -->
 
     <!-- TELL YOUR STORY -->
     <a name="publish"></a>
@@ -251,7 +251,7 @@
     <section class="stacked_hero_section stacked_hero_section--build">
       <h2 class="stacked_hero_section-title">Build Your Audience</h2>
       <div class="icon_box-wrapper">
-        <a href="calendar/">
+        <a href="eventcalendar/">
           <section class="icon_box icon_box--book">
             <div class="icon_box-icon"></div>
             <h3 class="icon_box-title">Book an Appearance</h3>
@@ -316,7 +316,7 @@
       <div class="site_footer-nav_wrapper">
         <nav class="site_footer-nav">
           <a href="/user/login/">Account</a>
-          <a href="/calendar/">Calendar</a>
+          <a href="/eventcalendar/">Calendar</a>
           <a href="/blogs/">Blogs</a>
           <a href="/help/">Help</a>
           <a href="/contact/">Contact Us</a>
@@ -324,7 +324,7 @@
         </nav>
         <nav class="site_footer-nav site_footer-nav--alt">
           <a href="/#learn">How it Works</a>
-          <a href="/#discover">Discover Your Voice</a>
+         <!-- <a href="/#discover">Discover Your Voice</a> -->
           <a href="/#tell">Tell Your Story</a>
           <a href="/#build">Build Your Audience</a>
         </nav>

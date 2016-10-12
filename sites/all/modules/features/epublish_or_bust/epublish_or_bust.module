@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the ePublish or BUST feature.
- */
-
-include_once 'epublish_or_bust.features.inc';

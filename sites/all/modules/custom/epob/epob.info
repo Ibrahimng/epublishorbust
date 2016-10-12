@@ -1,0 +1,8 @@
+name = ePublish or BUST
+description = Module to automate Available Time content.
+package = ePublish or BUST
+core = 7.x
+files[] = epob.module
+requires[] = flag:flag
+requires[] = mimemail:mimemail
+
