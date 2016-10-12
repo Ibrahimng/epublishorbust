@@ -16,9 +16,9 @@
  */
 function epob_form_available_time_node_form_alter(&$form, &$form_state) {
   global $user;
-  if(!empty($user_library_id = epob_get_user_library_nid($user))) {
-    $library = epob_get_library_entity($user_library_id);
-  }
+ // if(!empty($user_library_id = epob_get_user_library_nid($user))) {
+    $library = epob_get_library_entity($user);
+  //}
 
   //Set Available Time variables from Library node.
   $at_library = $library->field_user_library['und'][0]['tid'];
@@ -33,8 +33,8 @@ function epob_form_available_time_node_form_alter(&$form, &$form_state) {
   $form['body']['und'][0]['#default_value'] = $at_description;
   $form['body']['und'][0]['summary']['#default_value'] = $at_description_summary;
   $form['body']['und'][0]['#format'] = $at_description_format;
-  $form['field_library_confirmation_txt']['und'][0]['#default_value'] = $at_confirm;
-  $form['field_library_confirmation_txt']['und'][0]['#format'] = $at_confirm_format;
+  $form['field_confirmation_txt']['und'][0]['#default_value'] = $at_confirm;
+  $form['field_confirmation_txt']['und'][0]['#format'] = $at_confirm_format;
 }
 
 /**
@@ -54,6 +54,7 @@ function epob_get_user_library_nid($account) {
   $query->condition('n.type', 'library');
   $query->orderBy('f.revision_id', 'DESC');
   $results = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+  dsm($results);
   return $results;
 }
 
@@ -201,8 +202,8 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
   );
 
   //Build email notification to requesting user.
-  $requester_subject = "You have requested to appear at the $library->title at " . $available_time->field__available_time_date['und'][0]['value'] . ".";
-  $requester_message = $available_time->field_library_confirmation_txt['und'][0]['value'];
+  $requester_subject = "You have requested to appear at the $library->title at " . $available_time->field_calendar_date['und'][0]['value'] . ".";
+  $requester_message = $available_time->field_confirmation_txt['und'][0]['value'];
   $requester_message = epob_replace_message_tokens($requester_message, $tokens);
   $requester_body = array(
     $requester_message,
@@ -217,8 +218,8 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
   epob_send_notification($requester_key, $requester_to, $requester_params);
 
   //Build email notification for coordinators.
-  $coordinators_subject = "$user->name has requested to appear at the $library->title at " . $available_time->field__available_time_date['und'][0]['value'] . ".";
-  $coordinators_message = "$user->name has requested to appear at the $library->title at " . $available_time->field__available_time_date['und'][0]['value'] . ".\n\n";
+  $coordinators_subject = "$user->name has requested to appear at the $library->title at " . $available_time->field_calendar_date['und'][0]['value'] . ".";
+  $coordinators_message = "$user->name has requested to appear at the $library->title at " . $available_time->field_calendar_date['und'][0]['value'] . ".\n\n";
   $coordinators_message .= "Email $user->name: $user->mail.\n";
   $coordinators_message .= "View $user->name's account: $requester_view_path.\n\n";
   $coordinators_message .= "View the requested time: $available_time_path";
