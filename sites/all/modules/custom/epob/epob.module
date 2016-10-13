@@ -16,9 +16,10 @@
  */
 function epob_form_available_time_node_form_alter(&$form, &$form_state) {
   global $user;
- // if(!empty($user_library_id = epob_get_user_library_nid($user))) {
-    $library = epob_get_library_entity($user);
-  //}
+  $user_id = $user->uid;
+  if(!empty($user_library_id = epob_get_user_library_nid($user_id))) {
+    $library = epob_get_library_entity($user_library_id);
+  }
 
   //Set Available Time variables from Library node.
   $at_library = $library->field_user_library['und'][0]['tid'];
@@ -33,8 +34,8 @@ function epob_form_available_time_node_form_alter(&$form, &$form_state) {
   $form['body']['und'][0]['#default_value'] = $at_description;
   $form['body']['und'][0]['summary']['#default_value'] = $at_description_summary;
   $form['body']['und'][0]['#format'] = $at_description_format;
-  $form['field_confirmation_txt']['und'][0]['#default_value'] = $at_confirm;
-  $form['field_confirmation_txt']['und'][0]['#format'] = $at_confirm_format;
+  $form['field_default_confirmation_txt']['und'][0]['#default_value'] = $at_confirm;
+  $form['field_default_confirmation_txt']['und'][0]['#format'] = $at_confirm_format;
 }
 
 /**
@@ -42,19 +43,18 @@ function epob_form_available_time_node_form_alter(&$form, &$form_state) {
  *
  * Get User's Library node data.
  */
-function epob_get_user_library_nid($account) {
+function epob_get_user_library_nid($uid) {
   $query = db_select('field_data_field_user_library', 'f');
   $query->join('taxonomy_index', 't', 'f.field_user_library_tid = t.tid');
   $query->innerjoin('node', 'n', 't.nid = n.nid');
   $query->addField('t', 'tid');
   $query->addField('n', 'nid');
   $query->addField('n', 'title');
-  $query->condition('f.entity_id', $account->uid);
+  $query->condition('f.entity_id', $uid);
   $query->condition('f.bundle', 'user');
   $query->condition('n.type', 'library');
   $query->orderBy('f.revision_id', 'DESC');
   $results = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
-  dsm($results);
   return $results;
 }
 
@@ -106,7 +106,8 @@ function epob_get_library_entity($nid) {
     ->propertyCondition('status', 1)
     ->range(0,1)
     ->execute();
-  if (!empty($entities['node'])) {
+
+  if (!empty($entities)) {
     $node = node_load(current(array_keys($entities['node'])));
   }
   return $node;
@@ -203,15 +204,13 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
 
   //Build email notification to requesting user.
   $requester_subject = "You have requested to appear at the $library->title at " . $available_time->field_calendar_date['und'][0]['value'] . ".";
-  $requester_message = $available_time->field_confirmation_txt['und'][0]['value'];
+  $requester_message = $available_time->field_default_confirmation_txt['und'][0]['value'];
   $requester_message = epob_replace_message_tokens($requester_message, $tokens);
-  $requester_body = array(
-    $requester_message,
-  );
+
   $requester_params = array(
     'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
     'subject' => $requester_subject,
-    'body' => $requester_body,
+    'body' => $requester_message,
   );
   $requester_key = 'notify_requester';
   $requester_to = $user->mail;
@@ -247,7 +246,8 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
  */
 function epob_send_notification($key, $to, $params) {
   if($mail = drupal_mail('epob', $key, $to, language_default(), $params, 'qwerty@epublishorbust.com')) {
-    drupal_set_message('Sent!');
+    dsm($mail);
+    drupal_set_message('You will receive an email confirmation of your request from qwerty@epublishorbust.com');
   }
   return;
 }

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.32, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.44-37.3, for osx10.10 (x86_64)
 --
--- Host: localhost    Database: epubpxno_main
+-- Host: localhost    Database: epublishorbust
 -- ------------------------------------------------------
--- Server version	5.5.32-cll-lve
+-- Server version	5.5.44-37.3-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -171,7 +171,7 @@ CREATE TABLE `block` (
   PRIMARY KEY (`bid`),
   UNIQUE KEY `tmd` (`theme`,`module`,`delta`),
   KEY `list` (`theme`,`status`,`region`,`weight`,`module`)
-) ENGINE=InnoDB AUTO_INCREMENT=348 DEFAULT CHARSET=utf8 COMMENT='Stores block settings, such as region and visibility...';
+) ENGINE=InnoDB AUTO_INCREMENT=358 DEFAULT CHARSET=utf8 COMMENT='Stores block settings, such as region and visibility...';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -545,6 +545,24 @@ CREATE TABLE `cache_path` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `cache_rules`
+--
+
+DROP TABLE IF EXISTS `cache_rules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache_rules` (
+  `cid` varchar(255) NOT NULL DEFAULT '' COMMENT 'Primary Key: Unique cache ID.',
+  `data` longblob COMMENT 'A collection of data to cache.',
+  `expire` int(11) NOT NULL DEFAULT '0' COMMENT 'A Unix timestamp indicating when the cache entry should expire, or 0 for never.',
+  `created` int(11) NOT NULL DEFAULT '0' COMMENT 'A Unix timestamp indicating when the cache entry was created.',
+  `serialized` smallint(6) NOT NULL DEFAULT '0' COMMENT 'A flag to indicate whether content is serialized (1) or not (0).',
+  PRIMARY KEY (`cid`),
+  KEY `expire` (`expire`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cache table for the rules engine to store configured items.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `cache_token`
 --
 
@@ -891,7 +909,7 @@ CREATE TABLE `field_collection_item` (
   `field_name` varchar(32) NOT NULL COMMENT 'The name of the field on the host entity embedding this entity.',
   `archived` int(11) NOT NULL DEFAULT '0' COMMENT 'Boolean indicating whether the field collection item is archived.',
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Stores information about field collection items.';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='Stores information about field collection items.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -906,7 +924,7 @@ CREATE TABLE `field_collection_item_revision` (
   `item_id` int(11) NOT NULL COMMENT 'Field collection item ID.',
   PRIMARY KEY (`revision_id`),
   KEY `item_id` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Stores revision information about field collection items.';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='Stores revision information about field collection items.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2849,6 +2867,83 @@ CREATE TABLE `filter_format` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `flag`
+--
+
+DROP TABLE IF EXISTS `flag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flag` (
+  `fid` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT 'The unique ID for this particular flag.',
+  `entity_type` varchar(128) NOT NULL DEFAULT '' COMMENT 'The flag type, for example "node", "comment", or "user".',
+  `name` varchar(32) DEFAULT '' COMMENT 'The machine-name for this flag.',
+  `title` varchar(255) DEFAULT '' COMMENT 'The human-readable title for this flag.',
+  `global` tinyint(4) DEFAULT '0' COMMENT 'Whether this flag state should act as a single toggle to all users across the site.',
+  `options` text COMMENT 'The options and configuration of this flag.',
+  PRIMARY KEY (`fid`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='All available flags in the system.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `flag_counts`
+--
+
+DROP TABLE IF EXISTS `flag_counts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flag_counts` (
+  `fid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `entity_type` varchar(128) NOT NULL DEFAULT '' COMMENT 'The flag type, for example "node", "comment", or "user".',
+  `entity_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The unique ID of the flagged entity, for example the uid, cid, or nid.',
+  `count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The number of times this object has been flagged for this flag.',
+  `last_updated` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The UNIX time stamp representing when the flag was last updated.',
+  PRIMARY KEY (`fid`,`entity_id`),
+  KEY `fid_entity_type` (`fid`,`entity_type`),
+  KEY `entity_type_entity_id` (`entity_type`,`entity_id`),
+  KEY `fid_count` (`fid`,`count`),
+  KEY `fid_last_updated` (`fid`,`last_updated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='The number of times an item has been flagged.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `flag_types`
+--
+
+DROP TABLE IF EXISTS `flag_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flag_types` (
+  `fid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'The unqiue flag ID as defined for the flag in flag.',
+  `type` varchar(128) NOT NULL DEFAULT '' COMMENT 'The entity bundles that can be flagged by this fid.',
+  KEY `fid` (`fid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='The entity bundles that are affected by a flag.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `flagging`
+--
+
+DROP TABLE IF EXISTS `flagging`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `flagging` (
+  `flagging_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'The unique ID for this particular tag.',
+  `fid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'The unique flag ID this object has been flagged with, from flag.',
+  `entity_type` varchar(128) NOT NULL DEFAULT '' COMMENT 'The flag type, for example "node", "comment", or "user".',
+  `entity_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The unique ID of the flagged entity, for example the uid, cid, or nid.',
+  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The user ID by whom this object was flagged.',
+  `sid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The user’s numeric sid from the session_api table.',
+  `timestamp` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The UNIX time stamp representing when the flag was set.',
+  PRIMARY KEY (`flagging_id`),
+  UNIQUE KEY `fid_entity_id_uid_sid` (`fid`,`entity_id`,`uid`,`sid`),
+  KEY `entity_type_uid_sid` (`entity_type`,`uid`,`sid`),
+  KEY `entity_type_entity_id_uid_sid` (`entity_type`,`entity_id`,`uid`,`sid`),
+  KEY `entity_id_fid` (`entity_id`,`fid`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='Objects that have been flagged.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `flood`
 --
 
@@ -3140,7 +3235,7 @@ CREATE TABLE `menu_links` (
   KEY `menu_plid_expand_child` (`menu_name`,`plid`,`expanded`,`has_children`),
   KEY `menu_parents` (`menu_name`,`p1`,`p2`,`p3`,`p4`,`p5`,`p6`,`p7`,`p8`,`p9`),
   KEY `router_path` (`router_path`(128))
-) ENGINE=InnoDB AUTO_INCREMENT=2492 DEFAULT CHARSET=utf8 COMMENT='Contains the individual links within a menu.';
+) ENGINE=InnoDB AUTO_INCREMENT=2586 DEFAULT CHARSET=utf8 COMMENT='Contains the individual links within a menu.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3271,7 +3366,7 @@ CREATE TABLE `node` (
   KEY `tnid` (`tnid`),
   KEY `translate` (`translate`),
   KEY `language` (`language`)
-) ENGINE=InnoDB AUTO_INCREMENT=391 DEFAULT CHARSET=utf8 COMMENT='The base table for nodes.';
+) ENGINE=InnoDB AUTO_INCREMENT=397 DEFAULT CHARSET=utf8 COMMENT='The base table for nodes.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3334,7 +3429,7 @@ CREATE TABLE `node_revision` (
   PRIMARY KEY (`vid`),
   KEY `nid` (`nid`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1018 DEFAULT CHARSET=utf8 COMMENT='Stores information about each saved version of a node.';
+) ENGINE=InnoDB AUTO_INCREMENT=1024 DEFAULT CHARSET=utf8 COMMENT='Stores information about each saved version of a node.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3577,7 +3672,7 @@ CREATE TABLE `queue` (
   PRIMARY KEY (`item_id`),
   KEY `name_created` (`name`,`created`),
   KEY `expire` (`expire`)
-) ENGINE=InnoDB AUTO_INCREMENT=3756 DEFAULT CHARSET=utf8 COMMENT='Stores items in queues.';
+) ENGINE=InnoDB AUTO_INCREMENT=3988 DEFAULT CHARSET=utf8 COMMENT='Stores items in queues.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3816,6 +3911,75 @@ CREATE TABLE `role_permission` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `rules_config`
+--
+
+DROP TABLE IF EXISTS `rules_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rules_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'The internal identifier for any configuration.',
+  `name` varchar(64) NOT NULL COMMENT 'The name of the configuration.',
+  `label` varchar(255) NOT NULL DEFAULT 'unlabeled' COMMENT 'The label of the configuration.',
+  `plugin` varchar(127) NOT NULL COMMENT 'The name of the plugin of this configuration.',
+  `active` int(11) NOT NULL DEFAULT '1' COMMENT 'Boolean indicating whether the configuration is active. Usage depends on how the using module makes use of it.',
+  `weight` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Weight of the configuration. Usage depends on how the using module makes use of it.',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'The exportable status of the entity.',
+  `dirty` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Dirty configurations fail the integrity check, e.g. due to missing dependencies.',
+  `module` varchar(255) DEFAULT NULL COMMENT 'The name of the providing module if the entity has been defined in code.',
+  `owner` varchar(255) NOT NULL DEFAULT 'rules' COMMENT 'The name of the module via which the rule has been configured.',
+  `access_exposed` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Whether to use a permission to control access for using components.',
+  `data` longblob COMMENT 'Everything else, serialized.',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `plugin` (`plugin`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rules_dependencies`
+--
+
+DROP TABLE IF EXISTS `rules_dependencies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rules_dependencies` (
+  `id` int(10) unsigned NOT NULL COMMENT 'The primary identifier of the configuration.',
+  `module` varchar(255) NOT NULL COMMENT 'The name of the module that is required for the configuration.',
+  PRIMARY KEY (`id`,`module`),
+  KEY `module` (`module`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rules_tags`
+--
+
+DROP TABLE IF EXISTS `rules_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rules_tags` (
+  `id` int(10) unsigned NOT NULL COMMENT 'The primary identifier of the configuration.',
+  `tag` varchar(255) NOT NULL COMMENT 'The tag string associated with this configuration',
+  PRIMARY KEY (`id`,`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rules_trigger`
+--
+
+DROP TABLE IF EXISTS `rules_trigger`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rules_trigger` (
+  `id` int(10) unsigned NOT NULL COMMENT 'The primary identifier of the configuration.',
+  `event` varchar(127) NOT NULL DEFAULT '' COMMENT 'The name of the event on which the configuration should be triggered.',
+  PRIMARY KEY (`id`,`event`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `scheduler`
 --
 
@@ -3923,7 +4087,7 @@ DROP TABLE IF EXISTS `sequences`;
 CREATE TABLE `sequences` (
   `value` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'The value of the sequence.',
   PRIMARY KEY (`value`)
-) ENGINE=InnoDB AUTO_INCREMENT=2926 DEFAULT CHARSET=utf8 COMMENT='Stores IDs.';
+) ENGINE=InnoDB AUTO_INCREMENT=2927 DEFAULT CHARSET=utf8 COMMENT='Stores IDs.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4282,7 +4446,7 @@ CREATE TABLE `url_alias` (
   PRIMARY KEY (`pid`),
   KEY `alias_language_pid` (`alias`,`language`,`pid`),
   KEY `source_language_pid` (`source`,`language`,`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3467 DEFAULT CHARSET=utf8 COMMENT='A list of URL aliases for Drupal paths; a user may visit...';
+) ENGINE=InnoDB AUTO_INCREMENT=3473 DEFAULT CHARSET=utf8 COMMENT='A list of URL aliases for Drupal paths; a user may visit...';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4747,4 +4911,4 @@ CREATE TABLE `workbench_scheduler_types` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-12 11:48:16
+-- Dump completed on 2016-10-12 20:55:04
