@@ -41,6 +41,14 @@ function epob_form_available_time_node_form_alter(&$form, &$form_state) {
   $form['body']['und'][0]['#format'] = $at_description_format;
   $form['field_default_confirmation_txt']['und'][0]['#default_value'] = $at_confirm;
   $form['field_default_confirmation_txt']['und'][0]['#format'] = $at_confirm_format;
+  $form['field_calendar_date']['und'][0]['show_repeat_settings'] = array(
+    '#type' => 'hidden',
+    '#title' => 'Repeat',
+    '#weight' => '2.3',
+    '#prefix' => '<div class="date-clear">',
+    '#suffix' => '</div>',
+    '#default_value' => '0',
+  );
 }
 
 /**
