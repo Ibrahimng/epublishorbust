@@ -188,15 +188,17 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
   //Set $term_id to the tid of the taxonomy term associated with the available time node.
   $term_id = $available_time->field_user_library['und'][0]['tid'];
 
-  //Set $available_time_path to available time node path.
-  $available_time_path = $base_url . '/' . drupal_get_path_alias('node/'. $nid);
+  //Set $path to available time node path.
+  $path = $base_url . '/' . drupal_get_path_alias('node/'. $nid);
+
+  //Set $date to available date and time.
+  $date = $available_time->field_calendar_date['und'][0]['value'];
 
   //Set $library_id to the nid of the library node associated with the flagged available time node.
   $library_id = epob_get_library_nid_by_term($term_id);
 
   //Load the library node associated with the flagged available time node.
   $library = epob_get_library_entity($library_id);
-
   //Set $coordinators to an array containing the uids of coordinators for the library node.
   $coordinators = epob_library_get_coordinator_ids($library_id);
 
@@ -215,11 +217,12 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
 
   //Set $tokens array with tokens and replacement variables.
   $tokens = array(
-    '[available time path]' => $available_time_path,
+    '[path]' => $path,
+    '[date]' => $date,
   );
 
   //Build email notification to requesting user.
-  $requester_subject = "You have requested to appear at the $library->title at " . $available_time->field_calendar_date['und'][0]['value'] . ".";
+  $requester_subject = "You have requested to appear at the $library->title at " . $date . ".";
   $requester_message = $available_time->field_default_confirmation_txt['und'][0]['value'];
   $requester_message = epob_replace_message_tokens($requester_message, $tokens);
 
@@ -233,12 +236,13 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
   epob_send_notification($requester_key, $requester_to, $requester_params);
 
   //Build email notification for coordinators.
-  $coordinators_subject = "$user->name has requested to appear at the $library->title at " . $available_time->field_calendar_date['und'][0]['value'] . ".";
-  $coordinators_message = "$user->name has requested to appear at the $library->title at " . $available_time->field_calendar_date['und'][0]['value'] . ".\n\n";
-  $coordinators_message .= "Email $user->name: $user->mail.\n";
+  $coordinators_subject = "$user->name has requested to appear at the $library->title at $date.";
+  $coordinators_message = "$user->name has requested to appear at the $library->title at $date.\n\n";
+  $coordinators_message .= "Email $user->name: $user->mail.\n\n";
   $coordinators_message .= "View $user->name's account: $requester_view_path.\n\n";
-  $coordinators_message .= "View the requested time: $available_time_path";
-  $coordinators_message = epob_replace_message_tokens($coordinators_message, $tokens);
+  $coordinators_message .= "View the requested time: $path.\n\n\n";
+  $coordinators_message .= "$user->name received the following message:\n";
+  $coordinators_message .= $requester_message;
   $coordinators_body = array(
     $coordinators_message,
   );
@@ -249,7 +253,6 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
   );
   $coordinators_key = 'notify_coordinators';
   epob_send_notification($coordinators_key, $coordinators_to, $coordinators_params);
-
   return;
 }
 
@@ -261,10 +264,7 @@ function epob_flag_flag($flag, $nid, $user, $flagging) {
  * Sends notification emails based on actions taken on an Available Time node.
  */
 function epob_send_notification($key, $to, $params) {
-  if($mail = drupal_mail('epob', $key, $to, language_default(), $params, 'qwerty@epublishorbust.com')) {
-    dsm($mail);
-    drupal_set_message('You will receive an email confirmation of your request from qwerty@epublishorbust.com');
-  }
+  $mail = drupal_mail('epob', $key, $to, language_default(), $params, 'qwerty@epublishorbust.com');
   return;
 }
 
@@ -277,8 +277,7 @@ function epob_send_notification($key, $to, $params) {
  * Implements hook_flag_unflag().
  */
 function epob_flag_unflag($flag, $node, $user, $flagging) {
-  drupal_set_message('unflagged');// Do something in response to the flagging.
-  dsm($flagging);
+  //drupal_set_message('unflagged');// Do something in response to the unflagging.
   return;
 }
 
@@ -320,7 +319,7 @@ function epob_mail($key, &$message, $params) {
   return;
 }
 
-//**-------LIBRARY EVENT FUNCTIONS---*/
+//**-------LIBRARY EVENT NODE FUNCTIONS---*/
 /**----------------------------------*/
 
 /**
@@ -334,6 +333,33 @@ function epob_form_library_event_node_form_alter(&$form, &$form_state) {
   $user_id = $user->uid;
   $library = '';
   $user_library_id = '';
+
+  $user_library_id = epob_get_user_library_nid($user_id);
+  //if(!empty($user_library_id = epob_get_user_library_nid($user_id))) {
+  $library = epob_get_library_entity($user_library_id);
+
+  //}
+
+  //Set Available Time variables from Library node.
+  $el_library = $library->field_user_library['und'][0]['tid'];
+
+  //Set Available Time node form default values.
+  $form['field_user_library']['und']['#default_value'] = $el_library;
+
+}
+
+//**-------LIBRARY NODE FUNCTIONS---*/
+/**----------------------------------*/
+
+/**
+ * @param $form
+ * @param $form_state
+ *
+ * Implements hook_form_alter()'
+ */
+function epob_form_library_node_form_alter(&$form, &$form_state) {
+  global $user;
+  $user_id = $user->uid;
 
   $user_library_id = epob_get_user_library_nid($user_id);
   //if(!empty($user_library_id = epob_get_user_library_nid($user_id))) {
