@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.44-37.3, for osx10.10 (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.32, for Linux (x86_64)
 --
--- Host: localhost    Database: epublishorbust
+-- Host: localhost    Database: epubpxno_main
 -- ------------------------------------------------------
--- Server version	5.5.44-37.3-log
+-- Server version	5.5.32-cll-lve
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -1055,7 +1055,6 @@ CREATE TABLE `field_data_field_calendar_date` (
   `delta` int(10) unsigned NOT NULL COMMENT 'The sequence number for this data item, used for multi-value fields',
   `field_calendar_date_value` datetime DEFAULT NULL,
   `field_calendar_date_value2` datetime DEFAULT NULL,
-  `field_calendar_date_rrule` text,
   PRIMARY KEY (`entity_type`,`entity_id`,`deleted`,`delta`,`language`),
   KEY `entity_type` (`entity_type`),
   KEY `bundle` (`bundle`),
@@ -1947,7 +1946,6 @@ CREATE TABLE `field_revision_field_calendar_date` (
   `delta` int(10) unsigned NOT NULL COMMENT 'The sequence number for this data item, used for multi-value fields',
   `field_calendar_date_value` datetime DEFAULT NULL,
   `field_calendar_date_value2` datetime DEFAULT NULL,
-  `field_calendar_date_rrule` text,
   PRIMARY KEY (`entity_type`,`entity_id`,`revision_id`,`deleted`,`delta`,`language`),
   KEY `entity_type` (`entity_type`),
   KEY `bundle` (`bundle`),
@@ -2940,7 +2938,7 @@ CREATE TABLE `flagging` (
   KEY `entity_type_uid_sid` (`entity_type`,`uid`,`sid`),
   KEY `entity_type_entity_id_uid_sid` (`entity_type`,`entity_id`,`uid`,`sid`),
   KEY `entity_id_fid` (`entity_id`,`fid`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='Objects that have been flagged.';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='Objects that have been flagged.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3366,7 +3364,7 @@ CREATE TABLE `node` (
   KEY `tnid` (`tnid`),
   KEY `translate` (`translate`),
   KEY `language` (`language`)
-) ENGINE=InnoDB AUTO_INCREMENT=398 DEFAULT CHARSET=utf8 COMMENT='The base table for nodes.';
+) ENGINE=InnoDB AUTO_INCREMENT=400 DEFAULT CHARSET=utf8 COMMENT='The base table for nodes.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3429,7 +3427,7 @@ CREATE TABLE `node_revision` (
   PRIMARY KEY (`vid`),
   KEY `nid` (`nid`),
   KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1025 DEFAULT CHARSET=utf8 COMMENT='Stores information about each saved version of a node.';
+) ENGINE=InnoDB AUTO_INCREMENT=1027 DEFAULT CHARSET=utf8 COMMENT='Stores information about each saved version of a node.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4446,7 +4444,7 @@ CREATE TABLE `url_alias` (
   PRIMARY KEY (`pid`),
   KEY `alias_language_pid` (`alias`,`language`,`pid`),
   KEY `source_language_pid` (`source`,`language`,`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3474 DEFAULT CHARSET=utf8 COMMENT='A list of URL aliases for Drupal paths; a user may visit...';
+) ENGINE=InnoDB AUTO_INCREMENT=3476 DEFAULT CHARSET=utf8 COMMENT='A list of URL aliases for Drupal paths; a user may visit...';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4911,4 +4909,4 @@ CREATE TABLE `workbench_scheduler_types` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-12 23:15:07
+-- Dump completed on 2016-10-13  0:47:41
