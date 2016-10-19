@@ -2976,7 +2976,7 @@ CREATE TABLE `flood` (
   PRIMARY KEY (`fid`),
   KEY `allow` (`event`,`identifier`,`timestamp`),
   KEY `purge` (`expiration`)
-) ENGINE=InnoDB AUTO_INCREMENT=769 DEFAULT CHARSET=utf8 COMMENT='Flood controls the threshold of events, such as the...';
+) ENGINE=InnoDB AUTO_INCREMENT=787 DEFAULT CHARSET=utf8 COMMENT='Flood controls the threshold of events, such as the...';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3689,7 +3689,7 @@ CREATE TABLE `queue` (
   PRIMARY KEY (`item_id`),
   KEY `name_created` (`name`,`created`),
   KEY `expire` (`expire`)
-) ENGINE=InnoDB AUTO_INCREMENT=5063 DEFAULT CHARSET=utf8 COMMENT='Stores items in queues.';
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COMMENT='Stores items in queues.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3732,7 +3732,7 @@ CREATE TABLE `redirect` (
   UNIQUE KEY `hash` (`hash`),
   KEY `expires` (`type`,`access`),
   KEY `status_source_language` (`status`,`source`,`language`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 COMMENT='Stores information on redirects.';
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COMMENT='Stores information on redirects.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4928,4 +4928,4 @@ CREATE TABLE `workbench_scheduler_types` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-17 14:37:48
+-- Dump completed on 2016-10-19 11:09:31
